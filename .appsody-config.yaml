@@ -1,0 +1,4 @@
+application-name: vaccine-cold-chain-monitoring
+id: "20200611143026.09749464"
+project-name: reeferiotsimulator
+stack: docker.io/appsody/quarkus:0.3

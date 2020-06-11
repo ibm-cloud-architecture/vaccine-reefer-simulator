@@ -1,0 +1,60 @@
+apiVersion: appsody.dev/v1beta1
+kind: AppsodyApplication
+metadata:
+  annotations:
+    cekit.io/version: 3.6.0
+    commit.stack.appsody.dev/contextDir: /incubator/quarkus
+    commit.stack.appsody.dev/date: Wed May 13 15:06:15 2020 +0100
+    commit.stack.appsody.dev/message: 'quarkus: add monitoring to app-deploy.yaml
+      (#813)'
+    graalvm-archive-filename: graalvm-ce-linux-amd64-19.3.1-java8.tar.gz
+    graalvm-archive-url: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-19.3.1/graalvm-ce-java8-linux-amd64-19.3.1.tar.gz
+    graalvm-version: java8-19.3.1
+    image.opencontainers.org/created: '2020-06-11T14:30:28Z'
+    k8s.io/description: Quarkus.io builder image for building Quarkus applications.
+    k8s.io/display-name: Centos + GraalVM + Maven Image
+    maintainer: Quarkus Team <quarkus-dev@googlegroups.com>
+    openshift.io/expose-services: 8080:http
+    openshift.io/tags: builder,java,quarkus
+    org/label-schema.build-date: '20200504'
+    org/label-schema.license: GPLv2
+    org/label-schema.name: CentOS Base Image
+    org/label-schema.schema-version: '1.0'
+    org/label-schema.vendor: CentOS
+    stack.appsody.dev/authors: Paul Robinson <paulrobinson>
+    stack.appsody.dev/configured: docker.io/appsody/quarkus:0.3
+    stack.appsody.dev/created: '2020-05-13T14:09:26Z'
+    stack.appsody.dev/description: Quarkus runtime for running Java applications
+    stack.appsody.dev/documentation: https://github.com/appsody/stacks/tree/master/incubator/quarkus/README.md
+    stack.appsody.dev/licenses: Apache-2.0
+    stack.appsody.dev/revision: da3ac46b155809e870d1e819244ca335ec4851d9
+    stack.appsody.dev/source: https://github.com/appsody/stacks/tree/master/incubator/quarkus/image
+    stack.appsody.dev/tag: docker.io/appsody/quarkus:0.3.6
+    stack.appsody.dev/title: Quarkus
+    stack.appsody.dev/url: https://github.com/appsody/stacks/tree/master/incubator/quarkus
+    stack.appsody.dev/vendor: CentOS
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/part-of: vaccine-cold-chain-monitoring
+    image.opencontainers.org/title: reeferiotsimulator
+    stack.appsody.dev/id: quarkus
+    stack.appsody.dev/version: 0.3.6
+  name: reeferiotsimulator
+spec:
+  applicationImage: dev.local/reeferiotsimulator
+  createKnativeService: false
+  expose: true
+  monitoring:
+    labels:
+      k8s-app: reeferiotsimulator
+  service:
+    port: 8080
+    type: NodePort
+    provides:
+      context: /
+      category: openapi
+  stack: quarkus
+  version: 1.0.0
+  envFrom:
+  - secretRef:
+      name: reeferiotsimulator
