@@ -1,29 +1,25 @@
-# Kakfa template for Quarkus
+# Refrigerated container ML Simulator _(simulator)_
 
-This template provides a Java application which demonstrates using MicroProfile Reactive Messaging to consume and produce messages on Kafka topics. The application uses the example from the [Quarkus Kafka guide](https://quarkus.io/guides/kafka). 
+The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers').
 
-A bean produces a random `Integer` onto a Reactive Messaging channel named "generated-price" every 5 seconds. This channel is connected to a Kafka topic named "prices". Another bean consumes from that topic, applies a conversion, and publishes a `double` onto another channel named "my-data-stream". Finally, that channel is streamed to a JAX-RS endpoint `/prices.html`, using [Server-sent Events](https://en.wikipedia.org/wiki/Server-sent_events).
+## Installation
 
-## Getting Started
+The application is built using [Appsody](https://appsody.dev) as the developer experience tooling using the [python flask appsody stack](https://github.com/appsody/stacks/tree/master/incubator/python-flask).  The Appsody CLI is required locally to build and deploy the application properly, while the Appsody Operator is required on the target cluster to deploy the generated `AppsodyApplication`.
 
-1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
+### Run locally
 
-```bash
-mkdir my-project
-cd my-project
-appsody init quarkus kafka
-```
-This will initialize a Quarkus project using the `kafka` template.
+The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
 
-## Running locally
+`appsody run --network network_name --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=kafka:9092"`
 
-The template provides a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
+[http://localhost:8080/](http://localhost:8080/) will go directly to the Open API user interface.
 
-To run the application using Appsody, use this command, substituting in the name of your Docker network:
+### Docker build
 
-`$ appsody run --network network_name --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=kafka:9092"`
+The Docker image can be built from this directory by using the `appsody build` command:
 
-To shut down Kafka and Zookeeper afterwards, run `docker-compose down`.
+1. Ensure you are logged in to the desired remote Docker registry through your local Docker client.
+2. The `appsody build -t ibmcase/vaccine-reefer-simulator:appsody-v1 --push` command will build and push the application's Docker image to the specified remote image registry.
 
 ## Running on Kubernetes
 
@@ -41,3 +37,33 @@ spec:
 To get the `value` you need, you can run `kubectl describe kafka -n kafka` and examine the listener address in the status section.
 
 Once you have updated your `app-deploy.yaml` to inject the environment variable, you can run `appsody deploy` to run your Quarkus application on Kubernetes.
+
+### Application deployment
+
+The application can be deployed to a remote OpenShift cluster by using the `appsody deploy` command:
+
+1. There are four required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
+
+  - A `ConfigMap` named `kafka-brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
+  - A `ConfigMap` named `kafka-topics` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-topics_1)**
+  - A `Secret` named `eventstreams-api-key` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-api-key_1)**
+  - A `Secret` named `eventstreams-cert-pem` _(if connecting to an on-premise version of IBM Event Streams)_ **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-certificates)**
+
+## Usage
+
+Once deployed, you can access the Swagger-based REST API via the defined route and trigger the simulation controls.
+
+1. To determine the route, use the `oc get route reefer-simulator` command and go to the URL specified in the `HOST/PORT` field in your browser.
+2. From there, drill down into the `POST /control` section and click **Try it out!**.
+3. Enter any of the following options for the fields prepopulated in the `control` body:
+
+  - Container: `C01, C02, C03, C04`
+  - Product: `P01, P02, P03, P04`
+  - Simulation: `poweroff, temperature, co2sensor, o2sensor, normal`
+  - Number of records: A positive integer
+
+4. Click **Execute**
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

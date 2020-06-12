@@ -1,0 +1,21 @@
+---
+# Source: kcontainer-reefer-simulator/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-kcontainer-reefer-simulator-test-connection"
+  labels:
+    app.kubernetes.io/name: kcontainer-reefer-simulator
+    helm.sh/chart: kcontainer-reefer-simulator-0.1.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Tiller
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['release-name-kcontainer-reefer-simulator:8080']
+  restartPolicy: Never
