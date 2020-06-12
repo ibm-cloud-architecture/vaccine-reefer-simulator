@@ -1,4 +1,4 @@
 id: "20200611142812.44227300"
 application-name: vaccine-cold-chain-monitoring
 project-name: reeferiotsimulator
-stack: docker.io/appsody/python-flask:0.2
+stack: docker.io/appsody/python-flask:0.2.1
