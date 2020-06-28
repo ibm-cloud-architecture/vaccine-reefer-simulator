@@ -3,6 +3,7 @@ import random
 import numpy as np
 import pandas as pd
 import os
+import logging
 
 
 '''
@@ -66,7 +67,7 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
 
     Returns a Pandas dataframe with the indicated set of columns populated.
     '''
-    print("Generate " + str(nb_records) + " records for " + products[product_id]['d'])
+    logging.info("Generate " + str(nb_records) + " records for " + products[product_id]['d'])
     cols = {}
 
     # Constant values
@@ -154,7 +155,7 @@ class ReeferSimulator:
                 later.
         Returns a Pandas dataframe.
         """
-        print("Generating records for normal behavior")
+        logging.info("Generating records for normal behavior")
         df = _generateStationaryCols(nb_records, cid, product_id )
         df["measurement_time"] = _generateTimestamps(nb_records, start_time)
         return df[ReeferSimulator.COLUMN_NAMES]
@@ -182,7 +183,7 @@ class ReeferSimulator:
                 later.
         Returns a Pandas dataframe.
         '''
-        print("Generating records for some poweroff")
+        logging.info("Generating records for some poweroff")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df, 
             int(nb_records * PER_NB_WRONG_RECORDS),
@@ -222,7 +223,7 @@ class ReeferSimulator:
         Returns a Pandas dataframe with the schema given in 
         ReeferSimulator.COLUMN_NAMES.
         '''
-        print("Generating records for co2 sensor issue")
+        logging.info("Generating records for co2 sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,
                 int(nb_records * PER_NB_WRONG_RECORDS), 
@@ -263,7 +264,7 @@ class ReeferSimulator:
         Returns a Pandas dataframe with the schema given in 
         ReeferSimulator.COLUMN_NAMES.
         '''
-        print("Generating records for O2 sensor issue")
+        logging.info("Generating records for O2 sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,
                 int(nb_records * PER_NB_WRONG_RECORDS), 
@@ -294,7 +295,7 @@ class ReeferSimulator:
         Returns a Pandas dataframe with the schema given in 
         ReeferSimulator.COLUMN_NAMES.
         '''
-        print("Generating records for O2 sensor issue")
+        logging.info("Generating records for Temperature sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,
                 int(nb_records * PER_NB_WRONG_RECORDS), 
@@ -321,4 +322,4 @@ if __name__ == '__main__':
     df3=simul.generateTemperatureRecords("C300",200,"P01")
     df = df1.append(df2).append(df3)
     for i in list(df.to_records()):
-        print(i)
+        logging.info(i)

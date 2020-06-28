@@ -1,5 +1,6 @@
 from confluent_kafka import Producer 
-import json, datetime
+from kafka.errors import KafkaError
+import json, datetime, logging
 import userapp.infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 
 class MetricsEventsProducer:
@@ -19,8 +20,8 @@ class MetricsEventsProducer:
             options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
         if (EventBackboneConfiguration.isEncrypted()):
             options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
-        print("Kafka options are:")
-        print(options)
+        logging.info("Kafka options are:")
+        logging.info(options)
         self.producer = Producer(options)
 
 
@@ -28,18 +29,26 @@ class MetricsEventsProducer:
         """ Called once for each message produced to indicate delivery result.
             Triggered by poll() or flush(). """
         if err is not None:
-            print( str(datetime.datetime.today()) + ' - Message delivery failed: {}'.format(err))
+            logging.info( str(datetime.datetime.today()) + ' - Message delivery failed: {}'.format(err))
         else:
-            print(str(datetime.datetime.today()) + ' - Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
+            logging.info(str(datetime.datetime.today()) + ' - Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
 
     def publishEvent(self, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
-        print(dataStr)
-        self.producer.produce(EventBackboneConfiguration.getTelemetryTopicName(),
-                            key=eventToSend[keyName],
-                            value=dataStr.encode('utf-8'), 
-                            callback=self.delivery_report)
-        self.producer.flush()
+        logging.info(dataStr)
+        
+        future = self.producer.send(EventBackboneConfiguration.getTelemetryTopicName(),
+                           key=eventToSend[keyName],
+                           value=dataStr.encode('utf-8'))
+        try:
+            record_metadata = future.get(timeout=10)
+            logging.info(str(datetime.datetime.today()) 
+                + ' - Message delivered to {} [{}]'.format(record_metadata.topic(), record_metadata.partition()))
+        except KafkaError as ex:
+            # Decide what to do if produce request failed...
+            logging.error(ex)
+        finally:
+            self.producer.close()
 
     def close(self):
         self.producer.close()

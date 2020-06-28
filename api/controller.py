@@ -1,5 +1,6 @@
 
 from flask import Blueprint, request, abort
+import logging
 from flasgger import swag_from
 from flask_restful import Resource, Api
 from concurrent.futures import ThreadPoolExecutor
@@ -14,7 +15,7 @@ control_blueprint = Blueprint("control", __name__)
 api = Api(control_blueprint)
 metricsProducer = MetricsEventsProducer()
 def sendEvents(metrics):
-    print(metrics)
+    logging.info(metrics)
     for metric in metrics:
         evt = {"containerID": metric[0],
                 "timestamp": str(metric[1]),
@@ -36,10 +37,9 @@ class SimulationController(Resource):
     @track_requests
     @swag_from('controlapi.yml')
     def post(self):
-        print("post control received: ")
-        print(request.data)
+        logging.info("post control received: ")
         control = request.get_json(force=True)
-        print(control)
+        logging.info(control)
         if not 'containerID' in control:
             abort(400) 
         simulator = ReeferSimulator()

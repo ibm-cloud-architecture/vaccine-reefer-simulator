@@ -5,29 +5,29 @@ metadata:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /simulator
-    commit.image.appsody.dev/date: Thu Jun 11 14:30:31 2020 +0000
-    commit.image.appsody.dev/message: Initial commit of reeferiotsimulator
+    commit.image.appsody.dev/date: Fri Jun 12 10:09:08 2020 -0700
+    commit.image.appsody.dev/message: change to requirements
     commit.stack.appsody.dev/author: Kamran Shamsi <45264227+Kamran64@users.noreply.github.com>
     commit.stack.appsody.dev/committer: GitHub <noreply@github.com>
     commit.stack.appsody.dev/contextDir: /incubator/python-flask
     commit.stack.appsody.dev/date: Wed Apr 1 11:38:29 2020 +0100
     commit.stack.appsody.dev/message: Bump stack version to put src and image in the
       index (#736)
-    image.opencontainers.org/created: "2020-06-11T16:10:18-07:00"
+    image.opencontainers.org/created: "2020-06-12T17:01:34-07:00"
     image.opencontainers.org/documentation: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
-    image.opencontainers.org/revision: c812bcb86117f8800478a0c5eaeae52fbda624e1-modified
+    image.opencontainers.org/revision: f4995110fa5015bd27df77b3cfd19452ad5c970b-modified
     image.opencontainers.org/source: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator/tree/master
     image.opencontainers.org/url: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
     stack.appsody.dev/authors: Chris Bailey <cnbailey@gmail.com>, Henry Nash <henry.nash@uk.ibm.com>
-    stack.appsody.dev/configured: docker.io/appsody/python-flask:0.2
-    stack.appsody.dev/created: "2020-04-01T10:41:15Z"
+    stack.appsody.dev/configured: docker.io/appsody/python-flask:0.2.1
+    stack.appsody.dev/created: "2020-01-10T10:01:07Z"
     stack.appsody.dev/description: Flask web Framework for Python
-    stack.appsody.dev/digest: sha256:0c05ac205071873742867b8451ea60c780e2829472e25e5f2e6d16f30691b191
+    stack.appsody.dev/digest: sha256:712ed414c7df9c3e37336b183bfde8e917fdcff50daaa11f600a8d68ab3801df
     stack.appsody.dev/documentation: https://github.com/appsody/stacks/tree/master/incubator/python-flask/README.md
     stack.appsody.dev/licenses: Apache-2.0
     stack.appsody.dev/revision: d8bb65bb0eb5950b124d3f10468475bd84ecf8ee
     stack.appsody.dev/source: https://github.com/appsody/stacks/tree/master/incubator/python-flask/image
-    stack.appsody.dev/tag: docker.io/appsody/python-flask:0.2.3
+    stack.appsody.dev/tag: docker.io/appsody/python-flask:0.2.1
     stack.appsody.dev/title: Python Flask
     stack.appsody.dev/url: https://github.com/appsody/stacks/tree/master/incubator/python-flask
   creationTimestamp: null
@@ -35,10 +35,11 @@ metadata:
     app.kubernetes.io/part-of: vaccine-cold-chain-monitoring
     image.opencontainers.org/title: reeferiotsimulator
     stack.appsody.dev/id: python-flask
-    stack.appsody.dev/version: 0.2.3
+    stack.appsody.dev/version: 0.2.1
   name: vaccine-reefer-simulator
+  namespace: vaccine-cold-chain
 spec:
-  applicationImage: dev.local/reeferiotsimulator
+  applicationImage: ibmcase/vcc-reeferiotsimulator:v1.0.0
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
@@ -46,23 +47,15 @@ spec:
       configMapKeyRef:
         key: brokers
         name: kafka-brokers
-  - name: TELEMETRY_TOPIC
-    valueFrom:
-      configMapKeyRef:
-        key: reeferTelemetryTopic
-        name: kafka-topics
-  - name: CONTAINER_TOPIC
-    valueFrom:
-      configMapKeyRef:
-        key: containersTopic
-        name: kafka-topics
+  - name: KAFKA_MAIN_TOPIC
+    value: telemetries
   - name: KAFKA_APIKEY
     valueFrom:
       secretKeyRef:
         key: binding
         name: eventstreams-apikey
   - name: KAFKA_CERT
-    value: /certs/es-cert.pem
+    value: /project/userapp/certs/es-cert.pem
   expose: true
   livenessProbe:
     failureThreshold: 12

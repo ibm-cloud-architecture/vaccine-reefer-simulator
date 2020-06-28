@@ -10,7 +10,11 @@ The application is built using [Appsody](https://appsody.dev) as the developer e
 
 The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
 
-`appsody run --network network_name --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=kafka:9092"`
+`appsody run --network network_name --docker-options "--env KAFKA_BROKERS=$KAFKA_BROKERS --env KAFKA_APIKEY=$KAFKA_APIKEY --env KAFKA_CERT=$KAFKA_CER" `
+
+or 
+
+`docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_CERT=$KAFKA_CERT -p 8080:8080 dev.local/reeferiotsimulator`
 
 [http://localhost:8080/](http://localhost:8080/) will go directly to the Open API user interface.
 
