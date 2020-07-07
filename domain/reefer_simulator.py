@@ -30,6 +30,7 @@ METRIC_FREQUENCY = "5min"
 
 SIGMA_BASE = 1
 products = { 'P01': {'d': 'covid-19','type': 1,'T': 4.0,'H': 40},
+            'covid-19': {'d': 'covid-19','type': 1,'T': 4.0,'H': 40},
             'P02': {'d': 'covid-05','type': 2,'T': 6.0,'H': 60},
             'P03': {'d': 'ebola','type': 1,'T': 4.0,'H': 40},
             'P04': {'d': 'yellow-fever','type': 2,'T': 6.0,'H': 40},

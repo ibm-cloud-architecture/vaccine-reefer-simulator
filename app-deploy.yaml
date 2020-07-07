@@ -5,17 +5,17 @@ metadata:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /simulator
-    commit.image.appsody.dev/date: Fri Jun 12 10:09:08 2020 -0700
-    commit.image.appsody.dev/message: change to requirements
+    commit.image.appsody.dev/date: Sun Jun 28 15:36:51 2020 -0700
+    commit.image.appsody.dev/message: add change to simulator
     commit.stack.appsody.dev/author: Kamran Shamsi <45264227+Kamran64@users.noreply.github.com>
     commit.stack.appsody.dev/committer: GitHub <noreply@github.com>
     commit.stack.appsody.dev/contextDir: /incubator/python-flask
     commit.stack.appsody.dev/date: Wed Apr 1 11:38:29 2020 +0100
     commit.stack.appsody.dev/message: Bump stack version to put src and image in the
       index (#736)
-    image.opencontainers.org/created: "2020-06-12T17:01:34-07:00"
+    image.opencontainers.org/created: "2020-07-04T11:28:06-07:00"
     image.opencontainers.org/documentation: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
-    image.opencontainers.org/revision: f4995110fa5015bd27df77b3cfd19452ad5c970b-modified
+    image.opencontainers.org/revision: 05e1e9f64d69bc6aa264df31a0ebfe90a1284234-modified
     image.opencontainers.org/source: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator/tree/master
     image.opencontainers.org/url: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
     stack.appsody.dev/authors: Chris Bailey <cnbailey@gmail.com>, Henry Nash <henry.nash@uk.ibm.com>
@@ -39,23 +39,26 @@ metadata:
   name: vaccine-reefer-simulator
   namespace: vaccine-cold-chain
 spec:
-  applicationImage: ibmcase/vcc-reeferiotsimulator:v1.0.0
+  applicationImage: default-route-openshift-image-registry.gse-eda-demo-202005-fa9ee67c9ab6a7791435450358e564cc-0000.us-south.containers.appdomain.cloud/vaccine-cold-chain/reefer-iot-simulator:0.0.1
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
     valueFrom:
       configMapKeyRef:
-        key: brokers
-        name: kafka-brokers
+        key: kafka-brokers
+        name: vaccine-cmap
   - name: KAFKA_MAIN_TOPIC
     value: telemetries
   - name: KAFKA_APIKEY
     valueFrom:
       secretKeyRef:
         key: binding
-        name: eventstreams-apikey
+        name: es-oncloud-key
   - name: KAFKA_CERT
-    value: /project/userapp/certs/es-cert.pem
+    valueFrom:
+      configMapKeyRef:
+        key: KAFKA_CERT
+        name: vaccine-cmap
   expose: true
   livenessProbe:
     failureThreshold: 12

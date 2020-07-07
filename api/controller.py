@@ -15,7 +15,7 @@ control_blueprint = Blueprint("control", __name__)
 api = Api(control_blueprint)
 metricsProducer = MetricsEventsProducer()
 def sendEvents(metrics):
-    logging.info(metrics)
+    logging.error(metrics)
     for metric in metrics:
         evt = {"containerID": metric[0],
                 "timestamp": str(metric[1]),
@@ -37,7 +37,7 @@ class SimulationController(Resource):
     @track_requests
     @swag_from('controlapi.yml')
     def post(self):
-        logging.info("post control received: ")
+        logging.error("post control received: ")
         control = request.get_json(force=True)
         logging.info(control)
         if not 'containerID' in control:

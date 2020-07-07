@@ -1,4 +1,4 @@
- docker run -d --rm -p 9000:9000 \
+ docker run -ti --rm -p 9000:9000 \
      -v $(pwd)/..:/home \
     -e KAFKA_BROKERCONNECT=$KAFKA_BROKERS \
     -e KAFKA_PROPERTIES=$(cat kafka.properties | base64) \
