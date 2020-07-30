@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  password: VXJUV2JoT0RvdEFy
+kind: Secret
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/instance: my-user1
+    app.kubernetes.io/managed-by: strimzi-user-operator
+    app.kubernetes.io/name: strimzi-user-operator
+    app.kubernetes.io/part-of: eventstreams-my-user1
+    eventstreams.ibm.com/cluster: es-1
+    eventstreams.ibm.com/kind: KafkaUser
+  name: kafka-user
+  ownerReferences:
+  - apiVersion: eventstreams.ibm.com/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: KafkaUser
+    name: my-user1
+    uid: b153c879-25f6-4a91-b002-a877646cb213
+  selfLink: /api/v1/namespaces/integration/secrets/my-user1
+type: Opaque

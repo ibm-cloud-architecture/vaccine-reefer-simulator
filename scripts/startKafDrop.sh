@@ -1,4 +1,6 @@
- docker run -ti --rm -p 9000:9000 \
+cd $(dirname $0)
+ 
+docker run -ti --rm -p 9000:9000 \
      -v $(pwd)/..:/home \
     -e KAFKA_BROKERCONNECT=$KAFKA_BROKERS \
     -e KAFKA_PROPERTIES=$(cat kafka.properties | base64) \

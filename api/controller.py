@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from server.routes.prometheus import track_requests
 from userapp.infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from userapp.domain.reefer_simulator import ReeferSimulator
+from flask import current_app as app
 """
  created a new instance of the Blueprint class and bound the Controller resource to it.
 """
@@ -14,8 +15,12 @@ from userapp.domain.reefer_simulator import ReeferSimulator
 control_blueprint = Blueprint("control", __name__)
 api = Api(control_blueprint)
 metricsProducer = MetricsEventsProducer()
+
 def sendEvents(metrics):
-    logging.error(metrics)
+    """
+    Send Events to Kafka
+    """
+    app.logger.info(metrics)
     for metric in metrics:
         evt = {"containerID": metric[0],
                 "timestamp": str(metric[1]),
@@ -37,9 +42,9 @@ class SimulationController(Resource):
     @track_requests
     @swag_from('controlapi.yml')
     def post(self):
-        logging.error("post control received: ")
+        app.logger.info("post control received: ")
         control = request.get_json(force=True)
-        logging.info(control)
+        app.logger.info(control)
         if not 'containerID' in control:
             abort(400) 
         simulator = ReeferSimulator()

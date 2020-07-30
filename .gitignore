@@ -2,5 +2,8 @@ data.csv
 scripts/setenv.sh
 scripts/kafka.properties
 scripts/defineConfigMap.sh
+certs/*.pem
 ### VS Code ###
 .vscode/
+infrastructure/__pycache__/
+api/__pycache__/

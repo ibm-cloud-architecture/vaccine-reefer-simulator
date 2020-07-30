@@ -5,17 +5,17 @@ metadata:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /simulator
-    commit.image.appsody.dev/date: Sun Jun 28 15:36:51 2020 -0700
-    commit.image.appsody.dev/message: add change to simulator
+    commit.image.appsody.dev/date: Tue Jul 7 07:41:42 2020 -0700
+    commit.image.appsody.dev/message: add back reefer repo to create data at rest
     commit.stack.appsody.dev/author: Kamran Shamsi <45264227+Kamran64@users.noreply.github.com>
     commit.stack.appsody.dev/committer: GitHub <noreply@github.com>
     commit.stack.appsody.dev/contextDir: /incubator/python-flask
     commit.stack.appsody.dev/date: Wed Apr 1 11:38:29 2020 +0100
     commit.stack.appsody.dev/message: Bump stack version to put src and image in the
       index (#736)
-    image.opencontainers.org/created: "2020-07-04T11:28:06-07:00"
+    image.opencontainers.org/created: "2020-07-29T18:46:20-07:00"
     image.opencontainers.org/documentation: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
-    image.opencontainers.org/revision: 05e1e9f64d69bc6aa264df31a0ebfe90a1284234-modified
+    image.opencontainers.org/revision: ca6a9cfaf01adf46823f01d113c8484c0f1fdc58-modified
     image.opencontainers.org/source: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator/tree/master
     image.opencontainers.org/url: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
     stack.appsody.dev/authors: Chris Bailey <cnbailey@gmail.com>, Henry Nash <henry.nash@uk.ibm.com>
@@ -33,33 +33,41 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/part-of: vaccine-cold-chain-monitoring
-    image.opencontainers.org/title: reeferiotsimulator
+    image.opencontainers.org/title: vaccine-reefer-simulator
     stack.appsody.dev/id: python-flask
     stack.appsody.dev/version: 0.2.1
   name: vaccine-reefer-simulator
-  namespace: vaccine-cold-chain
+  namespace: vaccine-solution
 spec:
-  applicationImage: default-route-openshift-image-registry.gse-eda-demo-202005-fa9ee67c9ab6a7791435450358e564cc-0000.us-south.containers.appdomain.cloud/vaccine-cold-chain/reefer-iot-simulator:0.0.1
+  applicationImage: ibmcase/vcc-reeferiotsimulator:v1.0.1
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
     valueFrom:
       configMapKeyRef:
         key: kafka-brokers
-        name: vaccine-cmap
-  - name: KAFKA_MAIN_TOPIC
-    value: telemetries
-  - name: KAFKA_APIKEY
+        name: reefer-simul-cmap
+  - name: TOPIC_NAME
+    valueFrom:
+      configMapKeyRef:
+        key: kafka-topic
+        name: reefer-simul-cmap
+  - name: KAFKA_USER
+    valueFrom:
+      configMapKeyRef:
+        key: kafka_user
+        name: reefer-simul-cmap
+  - name: KAFKA_PWD
     valueFrom:
       secretKeyRef:
-        key: binding
-        name: es-oncloud-key
+        key: password
   - name: KAFKA_CERT
     valueFrom:
       configMapKeyRef:
-        key: KAFKA_CERT
-        name: vaccine-cmap
+        key: kafka_cert_path
+        name: reefer-simul-cmap
   expose: true
+  imagePullPolicy: Always
   livenessProbe:
     failureThreshold: 12
     httpGet:
@@ -69,7 +77,7 @@ spec:
     periodSeconds: 2
   monitoring:
     labels:
-      k8s-app: reefer-iot-simulator
+      k8s-app: vaccine-reefer-simulator
   service:
     annotations:
       prometheus.io/scrape: "true"
@@ -79,10 +87,10 @@ spec:
   version: 1.0.0
   volumeMounts:
   - mountPath: /certs
-    name: eventstreams-cert-pem
+    name: eventstreams-pem
   volumes:
-  - name: eventstreams-cert-pem
+  - name: eventstreams-pem
     secret:
       optional: true
-      secretName: eventstreams-cert-pem
+      secretName: eventstreams-pem
 status: {}
