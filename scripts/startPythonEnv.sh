@@ -19,9 +19,9 @@ then
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
      --network kafkanet \
-      -ti jbcodeforce/python37 bash
+      -ti ibmcase/python37 bash
 else
   docker run  -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_CERT=$KAFKA_CERT\
-      -ti jbcodeforce/python37  bash
+      -ti ibmcase/python37  bash
 fi

@@ -13,7 +13,7 @@ TOPIC_NAME=os.getenv("KAFKA_MAIN_TOPIC","telemetries")
 class MetricsEventsProducer:
 
     def __init__(self):
-        self.prepareProducer("ReeferTelemetryProducers")
+        self.prepareProducer("ReeferTelemetryProducer")
         
     def prepareProducer(self,groupID):
         options ={
