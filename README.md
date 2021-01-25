@@ -1,8 +1,8 @@
 # Refrigerated container ML Simulator _(simulator)_
 
-The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers'). This code is part of the Vaccine Cold Chain monitoring solution, and helps to control the test and the demonstration of the monitoring part of this solution. 
+The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers'). This code is part of the Vaccine Cold Chain monitoring solution, and helps to control the test and the demonstration of the monitoring part of this solution.
 
-You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/). 
+You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
 The last updated detailed documentation of this component is under [this chapter](https://ibm-cloud-architecture.github.io/vaccine-solution-main/solution/reefer-iot/).
 
 ## Installation
@@ -48,12 +48,12 @@ oc project integration
 # Access to Event Streams cluster
 cloudctl es init
 # From the result get the bootstrap address: some thing like:
-# ...-kafka-bootstrap-integration.apps.....:443 
+# ...-kafka-bootstrap-integration.apps.....:443
 # Get the certificate
 cloudctl es certificates --format pem
 # Get one of the kafka user defined with the scram-sha-512 authentication
 oc get kafkausers -n integration
-# For example here is an output: 
+# For example here is an output:
 # NAME      AUTHENTICATION   AUTHORIZATION
 # my-user1  scram-sha-512    simple
 ```
@@ -61,7 +61,7 @@ oc get kafkausers -n integration
 Set the following environment variables:
 
 ```shell
-export KAFKA_BROKERS=...-kafka-bootstrap-integration.apps.....:443 
+export KAFKA_BROKERS=...-kafka-bootstrap-integration.apps.....:443
 export KAFKA_USER=my-user1
 export KAFKA_PWD=$(oc -n integration get secret my-user1 -o jsonpath='{.data.password}'  | base64 --decode)
 ```
@@ -75,30 +75,73 @@ appsody run --docker-options "-e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_USER=$KAF
 
 To run on OpenShift, you will first need to deploy Event Streams using the Operator. See [product documentation here](https://ibm.github.io/event-streams/installing/installing/).
 
-* If not done before, define the config map needed to map to environment variables as defined in the `app-deploy.yaml`.
- 
- ```shell
- oc apply -f config/configmap.yaml
- # Verify 
- oc describe configmap reefer-simul-cmap
- ```
-
 ### Application deployment
 
 The application can be deployed to a remote OpenShift cluster by using the `appsody deploy` command:
 
-1. There are four required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
+1. There are multiple required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
 
-  - A `ConfigMap` named `kafka-brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
-  - A `ConfigMap` named `kafka-topics` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-topics_1)**
-  - A `Secret` named `eventstreams-api-key` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-api-key_1)**
-  - A `Secret` named `eventstreams-cert-pem` _(if connecting to an on-premise version of IBM Event Streams)_ **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-certificates)**
+  - A `ConfigMap` named `reefer-simul-cmap` containing the following key-value pairs:
+    -  `kafka-brokers`
+    -  `kafka-topic`
+    -  `kafka-user`
+    -  `kafka-cert-path`
+  - A `Secret` named `eventstreams-api-key` containing the following key-value pair:
+    - `password`
+  - A `Secret` named `eventstreams-pem` containing the following key-value pair _(if connecting to an on-premise version of IBM Event Streams)_:
+    - `es-cert.pem`
+
+2. A sample configuration command for each of the above artifacts is included below:
+
+  #### reefer-simul-cmap
+
+  ```
+  oc create configmap reefer-simul-cmap \
+  --from-literal=kafka-brokers=es101-kafka-bootstrap.eventstreams.svc:9093 \
+  --from-literal=kafka-topic=telemetries \
+  --from-literal=kafka-user=your-scram-user \
+  --from-literal=kafka-cert-path=/certs/es-cert.pem
+  ```
+
+  Replace the values for `kafka-brokers` and `kafka-user` to the values that match your environment. The value for `kafka-brokers` can be acquired via the **Connect to this topic** dialog in the Event Streams console and the _External_ Kafka listener section. The value for `kafka-user` can be acquired from the same panel by clicking **Generate SCRAM credentials**.
+
+  #### eventstreams-api-key
+
+  ```
+  oc create secret generic eventstreams-api-key \
+  --from-literal=password=Obt1234XYZnot8real
+  ```
+
+  Replace the value of `password` with the valid SCRAM password generated in the Event Streams Console.
+
+  #### eventstreams-pem
+
+  ```
+  oc create secret generic eventstreams-pem \
+  --from-file=es-cert.pem=/Users/osowski/Downloads/es-cert.pem
+  ```
+  Replace the value of `es-cert.pem` with the absolute path to your downloaded PEM certificate from Event Streams
+
+3. The ConfigMap object can also be created by editing the `config/configmap.yaml` file with the appropriate updates and running the following commands _(instead of the previous step)_:
+
+  ```shell
+  oc apply -f config/configmap.yaml
+  # Verify
+  oc describe configmap reefer-simul-cmap
+  ```
+
+4. Deploy the application via the Appsody deploy command, utilizing the Appsody Operator:
+
+  ```shell
+  appsody deploy --no-build -n <desired-namespace>
+  ```
+
 
 ## Usage
 
 Once deployed, you can access the Swagger-based REST API via the defined route and trigger the simulation controls.
 
-1. To determine the route, use the `oc get route reefer-simulator` command and go to the URL specified in the `HOST/PORT` field in your browser.
+1. To determine the route, use the `oc get route vaccine-reefer-simulator` command and go to the URL specified in the `HOST/PORT` field in your browser.
 2. From there, drill down into the `POST /control` section and click **Try it out!**.
 3. Enter any of the following options for the fields pre-populated in the `control` body:
 
