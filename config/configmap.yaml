@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: reefer-simul-cmap
 data:
-    kafka_brokers: eda-dev-kafka-bootstrap.eventstreams.svc:9093
-    kafka_user: "app-scram"
-    kafka_topic: "telemetries"
-    kafka_cert_path: "/certs/es-cert.pem"
+    KAFKA_BROKERS: eda-dev-kafka-bootstrap-eventstreams.gse-eda-2021-1-0143c5dd31acd8e030a1d6e0ab1380e3-0000.us-east.containers.appdomain.cloud:443
+    KAFKA_USER: "app-scram"
+    KAFKA_MAIN_TOPIC: "telemetries"
+    KAFKA_CERT: "/app/certs/ca.cert"

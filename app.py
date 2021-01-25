@@ -4,10 +4,7 @@ from flasgger import Swagger
 import os, time, logging
 from datetime import datetime
 
-# Application specifics
-from server import app
-
-from userapp.api.controller import control_blueprint
+from api.controller import control_blueprint
 
 
 # The python-flask stack includes the flask extension flasgger, which will build
@@ -33,6 +30,10 @@ swagger_template = {
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
+
+# Application specifics
+app = Flask(__name__)
+
 app.register_blueprint(control_blueprint)
 swagger = Swagger(app, template=swagger_template)
 
@@ -41,3 +42,6 @@ swagger = Swagger(app, template=swagger_template)
 def index():
     return redirect('/apidocs')
 
+
+if __name__ == "__main__":
+  app.run(debug=True,host='0.0.0.0')

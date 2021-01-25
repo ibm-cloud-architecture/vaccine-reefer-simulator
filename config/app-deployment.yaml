@@ -60,22 +60,17 @@ spec:
           protocol: TCP
         envFrom:
           - configMapRef:
-              name: vaccine-oro-cm
+              name: reefer-simul-cmap
         env:
-          - name: SCHEMA_REGISTRY_URL
-            valueFrom:
-              secretKeyRef:
-                key: SCHEMA_REGISTRY_URL
-                name: vaccine-oro-secrets
           - name: KAFKA_USER
-            value: vacc-user 
+            value: app-scram 
           - name: KAFKA_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: vacc-user 
+                name: app-scram 
           - name: KAFKA_CERT
-            value: "/app/certs/es-cert.pem"
+            value: "/app/certs/ca.crt"
           - name: PYTHONUNBUFFERED
             value: "yes"
           - name: JSONIFY_PRETTYPRINT_REGULAR
@@ -107,5 +102,5 @@ spec:
       volumes:
       - name: eventstreams-pem
         secret:
-          secretName: eda-es-pem
+          secretName: eda-dev-cluster-ca-cert
           

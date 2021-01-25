@@ -4,9 +4,9 @@ import logging
 from flasgger import swag_from
 from flask_restful import Resource, Api
 from concurrent.futures import ThreadPoolExecutor
-from server.routes.prometheus import track_requests
-from userapp.infrastructure.MetricsEventsProducer import MetricsEventsProducer 
-from userapp.domain.reefer_simulator import ReeferSimulator
+from api.prometheus import track_requests
+from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
+from domain.reefer_simulator import ReeferSimulator
 from flask import current_app as app
 """
  created a new instance of the Blueprint class and bound the Controller resource to it.

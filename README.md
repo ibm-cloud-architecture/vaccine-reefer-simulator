@@ -1,31 +1,28 @@
 # Refrigerated container ML Simulator _(simulator)_
 
-The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers'). This code is part of the Vaccine Cold Chain monitoring solution, and helps to control the test and the demonstration of the monitoring part of this solution.
+The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers'). This code is part of the Vaccine Cold Chain monitoring solution, and helps to control the test and the demonstration of the cold chain monitoring scenario or the anomaly detection use case.
 
 You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
 The last updated detailed documentation of this component is under [this chapter](https://ibm-cloud-architecture.github.io/vaccine-solution-main/solution/reefer-iot/).
 
 ## Installation
 
-The application is built using [Appsody](https://appsody.dev) using the [python flask appsody stack](https://github.com/appsody/stacks/tree/master/incubator/python-flask).  The Appsody CLI is required locally to build and deploy the application properly, while the Appsody Operator is required on the target cluster to deploy the generated `AppsodyApplication`.
 
 ## Build
 
 To build the local image:
 
 ```shell
-appsody build -t ibmcase/vaccine-reefer-simulator:1.0.0
+docker build -t ibmcase/vaccine-reefer-simulator .
+docker push ibmcase/vaccine-reefer-simulator
 ```
-
-If you want to build and push to remote registry:
-
-1. Ensure you are logged in to the desired remote Docker registry through your local Docker client.
-2. The `appsody build -t ibmcase/vaccine-reefer-simulator:v1.0.0 --push` command will build and push the application's image to the specified remote image registry.
-
-Once pushed we can deploy it to OpenShift.
 
 ## Run locally
 
+### Run with remote Kafka cluster deployed on OpenShift
+
+
+### Run with local kafka 
 The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
 
 `appsody run --network network_name --docker-options "--env KAFKA_BROKERS=$KAFKA_BROKERS --env KAFKA_APIKEY=$KAFKA_APIKEY --env KAFKA_CERT=$KAFKA_CER" <docker image name>`
@@ -99,8 +96,8 @@ The application can be deployed to a remote OpenShift cluster by using the `apps
   oc create configmap reefer-simul-cmap \
   --from-literal=kafka-brokers=es101-kafka-bootstrap.eventstreams.svc:9093 \
   --from-literal=kafka-topic=telemetries \
-  --from-literal=kafka_user=your-scram-user \
-  --from-literal=kafka_cert_path=/certs/es-cert.pem
+  --from-literal=kafka-user=your-scram-user \
+  --from-literal=kafka-cert-path=/certs/es-cert.pem
   ```
 
   Replace the values for `kafka-brokers` and `kafka-user` to the values that match your environment. The value for `kafka-brokers` can be acquired via the **Connect to this topic** dialog in the Event Streams console and the _External_ Kafka listener section. The value for `kafka-user` can be acquired from the same panel by clicking **Generate SCRAM credentials**.
