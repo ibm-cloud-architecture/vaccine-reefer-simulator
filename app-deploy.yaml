@@ -37,9 +37,8 @@ metadata:
     stack.appsody.dev/id: python-flask
     stack.appsody.dev/version: 0.2.4
   name: vaccine-reefer-simulator
-  namespace: vaccine
 spec:
-  applicationImage: ibmcase/vaccine-reefer-simulator:1.0.0
+  applicationImage: ibmcase/vaccine-reefer-simulator:v1.0.0
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
@@ -47,17 +46,26 @@ spec:
       configMapKeyRef:
         key: kafka_brokers
         name: reefer-simul-cmap
-  - name: TOPIC_NAME
+  - name: KAFKA_MAIN_TOPIC
     valueFrom:
       configMapKeyRef:
         key: kafka_topic
         name: reefer-simul-cmap
   - name: KAFKA_USER
-    value: ""
-  - name: KAFKA_PASSWORD
-    value: ""
+    valueFrom:
+      configMapKeyRef:
+        key: kafka-user
+        name: reefer-simul-cmap
+  - name: KAFKA_PWD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: eventstreams-api-key
   - name: KAFKA_CERT
-    value: /certs/es-cert.pem
+    valueFrom:
+      configMapKeyRef:
+        key: kafka-cert-path
+        name: reefer-simul-cmap
   expose: true
   imagePullPolicy: Always
   livenessProbe:

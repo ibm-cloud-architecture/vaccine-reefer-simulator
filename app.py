@@ -1,7 +1,7 @@
 from flask import Flask, redirect, abort
 from flasgger import Swagger
 
-import os, time
+import os, time, logging
 from datetime import datetime
 
 # Application specifics
@@ -31,6 +31,8 @@ swagger_template = {
   ],
 }
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 app.register_blueprint(control_blueprint)
 swagger = Swagger(app, template=swagger_template)
 
