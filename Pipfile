@@ -7,16 +7,16 @@ verify_ssl = true
 
 [packages]
 Flask = ">=1.1.1"
-flask-restful = ">=0.3.7"
-flasgger = "==0.9.3"
+flask-restful = ">=0.3.8"
+flasgger = ">=0.9.5"
 prometheus_client = "*"
+jsonschema = "*"
 gunicorn = ">=20.0.4"
-confluent_kafka = "==1.2.0"
+confluent_kafka = ">=1.4.0"
 pandas = "*"
 pytest = ">=5.3.1"
 pytest-cov = ">=2.7.1"
 flake8 = ">=3.7.8"
-pymongo = "*"
 dnspython = "*"
 
 [requires]

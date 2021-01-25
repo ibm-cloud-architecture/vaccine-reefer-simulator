@@ -5,29 +5,29 @@ metadata:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /simulator
-    commit.image.appsody.dev/date: Tue Jul 7 07:41:42 2020 -0700
-    commit.image.appsody.dev/message: add back reefer repo to create data at rest
+    commit.image.appsody.dev/date: Mon Aug 31 12:43:53 2020 -0700
+    commit.image.appsody.dev/message: remove old helm
     commit.stack.appsody.dev/author: Kamran Shamsi <45264227+Kamran64@users.noreply.github.com>
     commit.stack.appsody.dev/committer: GitHub <noreply@github.com>
     commit.stack.appsody.dev/contextDir: /incubator/python-flask
-    commit.stack.appsody.dev/date: Wed Apr 1 11:38:29 2020 +0100
-    commit.stack.appsody.dev/message: Bump stack version to put src and image in the
-      index (#736)
-    image.opencontainers.org/created: "2020-07-29T18:46:20-07:00"
-    image.opencontainers.org/documentation: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
-    image.opencontainers.org/revision: ca6a9cfaf01adf46823f01d113c8484c0f1fdc58-modified
-    image.opencontainers.org/source: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator/tree/master
-    image.opencontainers.org/url: https://github.ibm.com/vaccine-cold-chain/reeferiotsimulator
-    stack.appsody.dev/authors: Chris Bailey <cnbailey@gmail.com>, Henry Nash <henry.nash@uk.ibm.com>
-    stack.appsody.dev/configured: docker.io/appsody/python-flask:0.2.1
-    stack.appsody.dev/created: "2020-01-10T10:01:07Z"
+    commit.stack.appsody.dev/date: Tue Jun 16 13:12:10 2020 +0100
+    commit.stack.appsody.dev/message: 'python-flask: Avoid permission errors when
+      building dependencies (#834)'
+    image.opencontainers.org/created: "2020-12-31T13:01:47-08:00"
+    image.opencontainers.org/documentation: https://github.com/ibm-cloud-architecture/vaccine-reefer-simulator
+    image.opencontainers.org/revision: 8edd36abdf73a2643ea616e5ab482c9a2b786957-modified
+    image.opencontainers.org/source: https://github.com/ibm-cloud-architecture/vaccine-reefer-simulator/tree/master
+    image.opencontainers.org/url: https://github.com/ibm-cloud-architecture/vaccine-reefer-simulator
+    stack.appsody.dev/authors: Chris Bailey <seabaylea>, Henry Nash <henrynash>
+    stack.appsody.dev/configured: docker.io/appsody/python-flask:latest
+    stack.appsody.dev/created: "2020-06-16T12:14:33Z"
     stack.appsody.dev/description: Flask web Framework for Python
-    stack.appsody.dev/digest: sha256:712ed414c7df9c3e37336b183bfde8e917fdcff50daaa11f600a8d68ab3801df
+    stack.appsody.dev/digest: sha256:2113962fbbb33dd895cdfc878a501b65799737e4dbe688dc9da0de9c7c050218
     stack.appsody.dev/documentation: https://github.com/appsody/stacks/tree/master/incubator/python-flask/README.md
     stack.appsody.dev/licenses: Apache-2.0
-    stack.appsody.dev/revision: d8bb65bb0eb5950b124d3f10468475bd84ecf8ee
+    stack.appsody.dev/revision: fe8e2b8701074199dcf3ecb549ff2a40f7611d8c
     stack.appsody.dev/source: https://github.com/appsody/stacks/tree/master/incubator/python-flask/image
-    stack.appsody.dev/tag: docker.io/appsody/python-flask:0.2.1
+    stack.appsody.dev/tag: docker.io/appsody/python-flask:0.2.4
     stack.appsody.dev/title: Python Flask
     stack.appsody.dev/url: https://github.com/appsody/stacks/tree/master/incubator/python-flask
   creationTimestamp: null
@@ -35,37 +35,29 @@ metadata:
     app.kubernetes.io/part-of: vaccine-cold-chain-monitoring
     image.opencontainers.org/title: vaccine-reefer-simulator
     stack.appsody.dev/id: python-flask
-    stack.appsody.dev/version: 0.2.1
+    stack.appsody.dev/version: 0.2.4
   name: vaccine-reefer-simulator
-  namespace: vaccine-solution
+  namespace: vaccine
 spec:
-  applicationImage: ibmcase/vcc-reeferiotsimulator:v1.0.1
+  applicationImage: ibmcase/vaccine-reefer-simulator:1.0.0
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
     valueFrom:
       configMapKeyRef:
-        key: kafka-brokers
+        key: kafka_brokers
         name: reefer-simul-cmap
   - name: TOPIC_NAME
     valueFrom:
       configMapKeyRef:
-        key: kafka-topic
+        key: kafka_topic
         name: reefer-simul-cmap
   - name: KAFKA_USER
-    valueFrom:
-      configMapKeyRef:
-        key: kafka_user
-        name: reefer-simul-cmap
-  - name: KAFKA_PWD
-    valueFrom:
-      secretKeyRef:
-        key: password
+    value: ""
+  - name: KAFKA_PASSWORD
+    value: ""
   - name: KAFKA_CERT
-    valueFrom:
-      configMapKeyRef:
-        key: kafka_cert_path
-        name: reefer-simul-cmap
+    value: /certs/es-cert.pem
   expose: true
   imagePullPolicy: Always
   livenessProbe:

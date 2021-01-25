@@ -2,10 +2,10 @@ from confluent_kafka import Producer
 import json, datetime, logging
 import os
 
-KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','localhost:9092')
+KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','')
 KAFKA_APIKEY = os.getenv('KAFKA_APIKEY','')
-KAFKA_CERT = os.getenv('KAFKA_CERT','/certs/es-cert.pem')
-KAFKA_USER =  os.getenv('KAFKA_USER','token')
+KAFKA_CERT = os.getenv('KAFKA_CERT','')
+KAFKA_USER =  os.getenv('KAFKA_USER','')
 KAFKA_PWD =  os.getenv('KAFKA_PWD','')
 KAFKA_SASL_MECHANISM=  os.getenv('KAFKA_SASL_MECHANISM','SCRAM-SHA-512')
 TOPIC_NAME=os.getenv("KAFKA_MAIN_TOPIC","telemetries")
@@ -22,7 +22,8 @@ class MetricsEventsProducer:
                 'delivery.timeout.ms': 15000,
                 'request.timeout.ms' : 15000
         }
-        if (KAFKA_USER != 'token'):
+        print("kafka-user: " + KAFKA_USER)
+        if (KAFKA_USER != ''):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = KAFKA_SASL_MECHANISM
             options['sasl.username'] = KAFKA_USER

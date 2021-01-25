@@ -44,7 +44,7 @@ If you want to remote connect to Event Streams on OpenShift, you need to get the
 # login to OpenShift
 oc login --token=L0.... --server=https://api.eda-solutions.gse-ocp.net:6443
 # Access to the project where event streams run
-oc project integration
+oc project eventstreams
 # Access to Event Streams cluster
 cloudctl es init
 # From the result get the bootstrap address: some thing like:
@@ -89,8 +89,8 @@ The application can be deployed to a remote OpenShift cluster by using the `apps
 
 1. There are four required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
 
-  - A `ConfigMap` named `kafka-brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
-  - A `ConfigMap` named `kafka-topics` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-topics_1)**
+  - A `ConfigMap` named `kafka_brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
+  - A `ConfigMap` named `kafka_topics` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-topics_1)**
   - A `Secret` named `eventstreams-api-key` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-api-key_1)**
   - A `Secret` named `eventstreams-cert-pem` _(if connecting to an on-premise version of IBM Event Streams)_ **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-certificates)**
 
