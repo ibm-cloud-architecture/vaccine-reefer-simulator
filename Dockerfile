@@ -6,7 +6,7 @@ ENV PYTHONPATH=/app
 RUN pip install --upgrade pip \
   && pip install pipenv flask gunicorn
 
-ADD . /app
+COPY . /app
 WORKDIR /app
 # First we get the dependencies for the stack itself
 RUN pipenv lock -r > requirements.txt
