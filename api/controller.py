@@ -61,7 +61,8 @@ class SimulationController(Resource):
             metrics=self.simulator.generateO2Tuples(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.SIMUL_TEMPERATURE:
             metrics=self.simulator.generateTemperatureTuples(control["containerID"],nb_records,control["product_id"])
-      
+        elif  control["simulation"]  == ReeferSimulator.NORMAL:
+            metrics=self.simulator.generateNormalRecords(control["containerID"],nb_records,control["product_id"])
         else:
             return {"error":"Wrong simulation controller data"},404
     
