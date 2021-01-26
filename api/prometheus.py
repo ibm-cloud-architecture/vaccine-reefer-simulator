@@ -2,11 +2,11 @@ from flask import Blueprint, Response, request
 from prometheus_client import generate_latest, Counter
 from functools import wraps
 
-metrics_bp = Blueprint("metrics", __name__)
+metrics_blueprint = Blueprint("metrics", __name__)
 
 # route to display configured Prometheus metrics
 # note that you will need to set up custom metric observers for your app
-@metrics_bp.route('/metrics')
+@metrics_blueprint.route('/metrics')
 def prometheus_metrics():
     """Metrics for the service
     Return the metrics of the service.

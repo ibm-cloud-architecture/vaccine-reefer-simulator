@@ -18,6 +18,7 @@ pytest = ">=5.3.1"
 pytest-cov = ">=2.7.1"
 flake8 = ">=3.7.8"
 dnspython = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.7"

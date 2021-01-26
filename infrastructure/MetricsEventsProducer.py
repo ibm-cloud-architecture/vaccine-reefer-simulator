@@ -9,10 +9,12 @@ KAFKA_PASSWORD =  os.getenv('KAFKA_PASSWORD','')
 KAFKA_SASL_MECHANISM=  os.getenv('KAFKA_SASL_MECHANISM','SCRAM-SHA-512')
 TOPIC_NAME=os.getenv("KAFKA_MAIN_TOPIC","telemetries")
 
+
 class MetricsEventsProducer:
 
     def __init__(self):
         self.prepareProducer("ReeferTelemetryProducer")
+        print("MetricsEventsProducer")
         
     def prepareProducer(self,groupID):
         options ={

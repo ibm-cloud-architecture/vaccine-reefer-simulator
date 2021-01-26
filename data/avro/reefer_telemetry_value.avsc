@@ -8,7 +8,7 @@
             "type" : "string"
         },
         {
-            "name" : "timestamp",
+            "name" : "measurement_time",
             "type" : "string"
         },
         {

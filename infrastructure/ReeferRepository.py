@@ -89,12 +89,12 @@ class ReeferRepository:
 
 
 
-if __name__ == '__main__':
-    repo = ReeferRepository()
-    conn=repo.connect()
+# if __name__ == '__main__':
+#    repo = ReeferRepository()
+#    conn=repo.connect()
 
     # repo.createTelemetriesCollection()
-    for t in repo.getAllReeferTelemetries():
-        print(t)
+#    for t in repo.getAllReeferTelemetries():
+#        print(t)
 
     
