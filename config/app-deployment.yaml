@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vaccine-reefer-simulator
-  namespace: vaccine
   labels:
     name: vaccine-reefer-simulator
     app: vaccine-reefer-simulator
@@ -21,7 +20,6 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: vaccine-reefer-simulator
-  namespace: vaccine
   labels:
     app: vaccine-reefer-simulator
 spec:
@@ -38,7 +36,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vaccine-reefer-simulator
-  namespace: vaccine
   labels:
     app: vaccine-reefer-simulator
 spec:
@@ -60,17 +57,10 @@ spec:
           protocol: TCP
         envFrom:
           - configMapRef:
-              name: reefer-simul-cmap
+              name: reefer-simul-cm
+          - secretRef:
+              name: reefer-simul-secret
         env:
-          - name: KAFKA_USER
-            value: app-scram 
-          - name: KAFKA_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: password
-                name: app-scram 
-          - name: KAFKA_CERT
-            value: "/app/certs/ca.crt"
           - name: PYTHONUNBUFFERED
             value: "yes"
           - name: JSONIFY_PRETTYPRINT_REGULAR
@@ -79,8 +69,8 @@ spec:
             value: "False"
         expose: true
         volumeMounts:
-            - name: eventstreams-pem
-              mountPath: /app/certs
+        - name: eventstreams-pem
+          mountPath: /app/certs
         livenessProbe:
           failureThreshold: 12
           httpGet:
@@ -102,5 +92,4 @@ spec:
       volumes:
       - name: eventstreams-pem
         secret:
-          secretName: eda-dev-cluster-ca-cert
-          
+          secretName: {cluster-name}-cluster-ca-cert

@@ -50,7 +50,7 @@ docker push ibmcase/vaccine-reefer-simulator
 * In the shell session start the app with `python app.py`
 * Use your web browser to access [http://localhost:5000](http://localhost:5000) to access the swagger.
 
-### Run with local kafka 
+### Run with local kafka
 
 The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
 
@@ -72,7 +72,7 @@ To run on OpenShift, you will first need to deploy Event Streams using the Opera
 The application can be deployed to a remote OpenShift cluster by using the deployment config: [deployment](https://github.com/ibm-cloud-architecture/vaccine-reefer-simulator/blob/master/config/app-deployment.yaml)
 
 * Connect to the vaccine project using: `oc project vaccine`
-* If you deploy the app to use the internal URL, something like (), get a TLS user, if you use the external address use a scram user:
+* Create a SCRAM-512-based user: **_(the current implementation of this microservice does not support TLS-based user authentication)_**
 
   ```shell
   oc get kafkausers -n eventstreams
@@ -81,24 +81,39 @@ The application can be deployed to a remote OpenShift cluster by using the deplo
   # app-tls                             eda-dev   tls              simple
   ```
 
-* Modify the `config/configmap.yaml` with the Kafka Broker URL and kafka user you are using. Then do:
+* Modify the `config/configmap.yaml` with the Kafka Broker URL and Topic information.
 
- ```shell
- oc apply -f config/configmap.yaml
- ```
+* Create the necessary configuration information in a ConfigMap via the following command:
 
-* Get the secret for the cluster certificate from the `eventstreams` project to your project, where the app will run: 
+   ```shell
+   oc apply -f config/configmap.yaml
+   ```
+
+* Modify the `config/secret.yaml` with the Kafka user credentials created above.
+
+* Create the necessary configuration information in a Secret via the following command:
 
   ```shell
-  oc get secret eda-dev-cluster-ca-cert -n eventstreams -o yaml | oc apply -f -
+  oc apply -f config/secret.yaml
   ```
+
+* Get the secret for the cluster certificate from the `eventstreams` project to your project:
+
+  ```shell
+  oc get secret {cluster-name}-cluster-ca-cert -n eventstreams -o yaml | oc apply -f -
+  ```
+
+* Modify the following elements of the `containers` section of the Deployment object in the `config/app-deployment.yaml` file:
+  *  `envFrom.configMapRef.name` should point to the name of the ConfigMap you created above _(if changed in `config/configmap.yaml`)_
+  *  `envFrom.secretRef.name` should point to the name of the Secret you created above _(if changed in `config/secret.yaml`)_
+  *  `volumes[0].secret.secretName` should point to the Secret you copied from the `eventstreams` namespace
 
 * Deploy the application:
 
   ```shell
   oc apply -f config/app-deployment.yaml
   ```
- 
+
 ### Usage
 
 Once deployed, you can access the Swagger-based REST API via the defined route and trigger the simulation controls.
