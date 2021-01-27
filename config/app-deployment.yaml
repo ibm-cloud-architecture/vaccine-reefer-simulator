@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaccine-reefer-simulator
+  namespace: vaccine
+  labels:
+    name: vaccine-reefer-simulator
+    app: vaccine-reefer-simulator
+spec:
+  ports:
+    - name: web
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+  selector:
+    app: vaccine-reefer-simulator
+  type: ClusterIP
+  sessionAffinity: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: vaccine-reefer-simulator
+  namespace: vaccine
+  labels:
+    app: vaccine-reefer-simulator
+spec:
+  path: /
+  to:
+    kind: Service
+    name: vaccine-reefer-simulator
+    weight: 100
+  port:
+    targetPort: 5000
+  wildcardPolicy: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaccine-reefer-simulator
+  namespace: vaccine
+  labels:
+    app: vaccine-reefer-simulator
+spec:
+  selector:
+    matchLabels:
+      app: vaccine-reefer-simulator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vaccine-reefer-simulator
+    spec:
+      containers:
+      - name: vaccine-reefer-simulator
+        image: ibmcase/vaccine-reefer-simulator
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: reefer-simul-cmap
+        env:
+          - name: KAFKA_USER
+            value: app-scram 
+          - name: KAFKA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: app-scram 
+          - name: KAFKA_CERT
+            value: "/app/certs/ca.crt"
+          - name: PYTHONUNBUFFERED
+            value: "yes"
+          - name: JSONIFY_PRETTYPRINT_REGULAR
+            value: "True"
+          - name: FLASK_DEBUG
+            value: "False"
+        expose: true
+        volumeMounts:
+            - name: eventstreams-pem
+              mountPath: /app/certs
+        livenessProbe:
+          failureThreshold: 12
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 2
+        monitoring:
+          labels:
+            k8s-app: vaccine-reefer-simulator
+        pullPolicy: Always
+        service:
+          annotations:
+            prometheus.io/scrape: "true"
+          port: 8080
+          type: NodePort
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+      volumes:
+      - name: eventstreams-pem
+        secret:
+          secretName: eda-dev-cluster-ca-cert
+          

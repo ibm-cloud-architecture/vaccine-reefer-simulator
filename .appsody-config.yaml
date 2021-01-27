@@ -1,4 +1,0 @@
-id: "20200611142812.44227300"
-application-name: vaccine-cold-chain-monitoring
-project-name: vaccine-reefer-simulator
-stack: docker.io/appsody/python-flask:latest

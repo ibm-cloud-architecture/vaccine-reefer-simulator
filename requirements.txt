@@ -2,12 +2,12 @@
 aniso8601==8.0.0
 attrs==19.3.0
 click==7.0
-confluent-kafka==1.2.0
+confluent-kafka==1.4.0
 coverage==4.5.4
 dnspython==1.16.0
 entrypoints==0.3
 flake8==3.7.9
-flasgger==0.9.3
+flasgger==0.9.5
 flask-restful==0.3.7
 flask==1.1.1
 gunicorn==20.0.4

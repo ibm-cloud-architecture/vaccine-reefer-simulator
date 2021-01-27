@@ -2,18 +2,19 @@ from confluent_kafka import Producer
 import json, datetime, logging
 import os
 
-KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','localhost:9092')
-KAFKA_APIKEY = os.getenv('KAFKA_APIKEY','')
-KAFKA_CERT = os.getenv('KAFKA_CERT','/certs/es-cert.pem')
-KAFKA_USER =  os.getenv('KAFKA_USER','token')
-KAFKA_PWD =  os.getenv('KAFKA_PWD','')
+KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','')
+KAFKA_CERT = os.getenv('KAFKA_CERT','')
+KAFKA_USER =  os.getenv('KAFKA_USER','')
+KAFKA_PASSWORD =  os.getenv('KAFKA_PASSWORD','')
 KAFKA_SASL_MECHANISM=  os.getenv('KAFKA_SASL_MECHANISM','SCRAM-SHA-512')
 TOPIC_NAME=os.getenv("KAFKA_MAIN_TOPIC","telemetries")
+
 
 class MetricsEventsProducer:
 
     def __init__(self):
         self.prepareProducer("ReeferTelemetryProducer")
+        print("MetricsEventsProducer")
         
     def prepareProducer(self,groupID):
         options ={
@@ -22,17 +23,12 @@ class MetricsEventsProducer:
                 'delivery.timeout.ms': 15000,
                 'request.timeout.ms' : 15000
         }
-        if (KAFKA_USER != 'token'):
+        print("kafka-user: " + KAFKA_USER)
+        if (KAFKA_USER != ''):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = KAFKA_SASL_MECHANISM
             options['sasl.username'] = KAFKA_USER
-            options['sasl.password'] = KAFKA_PWD
-        else:
-            if (KAFKA_APIKEY != ''):
-                options['security.protocol'] = 'SASL_SSL'
-                options['sasl.mechanisms'] = 'PLAIN'
-                options['sasl.username'] = KAFKA_USER
-                options['sasl.password'] = KAFKA_APIKEY
+            options['sasl.password'] = KAFKA_PASSWORD
 
         if (KAFKA_CERT != '' ):
             options['ssl.ca.location'] = KAFKA_CERT

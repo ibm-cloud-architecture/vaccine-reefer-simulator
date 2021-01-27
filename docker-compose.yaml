@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   zookeeper:
-    image: strimzi/kafka:latest-kafka-2.5.0
+    image: strimzi/kafka:latest-kafka-2.6.0
     hostname: zookeeper
     command: [
       "sh", "-c",
@@ -13,7 +13,7 @@ services:
       LOG_DIR: /tmp/logs
 
   kafka:
-    image: strimzi/kafka:latest-kafka-2.5.0
+    image: strimzi/kafka:latest-kafka-2.6.0
     hostname: kafka
     command: [
       "sh", "-c",
@@ -31,7 +31,3 @@ services:
     depends_on:
         - zookeeper
 
-networks:
-  default:
-    external:
-        name: kafkanet
