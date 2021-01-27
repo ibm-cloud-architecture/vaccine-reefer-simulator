@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: vaccine-reefer-simulator
-        image: ibmcase/vaccine-reefer-simulator
+        image: ibmcase/vaccine-reefer-simulator:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000

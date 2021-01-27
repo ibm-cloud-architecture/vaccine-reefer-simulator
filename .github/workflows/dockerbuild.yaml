@@ -4,7 +4,9 @@ on:
     branches:
       - master
     paths-ignore:
-      - 'docs/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'README.md'
 
 jobs:
   validate-docker-secrets:
