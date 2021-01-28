@@ -16,7 +16,7 @@ then
   docker run -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
-     --network kafkanet \
+     --network vaccine-reefer-simulator_default -p 5000:5000  \
       -ti ibmcase/vaccine-reefer-simulator bash
 else
   docker run  -e DISPLAY=$IPADDR:0 -v $(pwd):/app -ti  \

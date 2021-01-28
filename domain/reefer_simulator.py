@@ -15,13 +15,13 @@ The variables that changes are Co2, O2, power and temperature
 
 # Define constants
 
-CO2_LEVEL = 4 # in percent
+CO2_LEVEL = 7 # in percent - above 12 is bad
 O2_LEVEL = 21 # in percent - below 12 it is bad
 NITROGEN_LEVEL = 78 # in percent
 POWER_LEVEL= 2.7 # in kW
 HUMIDITY_LEVEL = 30 # in percent
 MAX_RECORDS = 1000
-PER_NB_WRONG_RECORDS = .12
+PER_NB_WRONG_RECORDS = .17  # percentage of wrong records to produce
 NB_WRONG_RECORDS = int( MAX_RECORDS * PER_NB_WRONG_RECORDS)
 NB_WRONG_RECORD_SERIE = 3
 
@@ -29,8 +29,8 @@ DEFROST_LEVEL = 7   # Common timing periods were 6, 8, 12 and 24 hours.
 METRIC_FREQUENCY = "5min"
 
 SIGMA_BASE = 1
-products = { 'P01': {'d': 'covid-19','type': 1,'T': 4.0,'H': 40},
-            'covid-19': {'d': 'covid-19','type': 1,'T': 4.0,'H': 40},
+products = { 'P01': {'d': 'covid-19','type': 1,'T': -50.0,'H': 40},
+            'covid-19': {'d': 'covid-19','type': 1,'T': -50.0,'H': 40},
             'P02': {'d': 'covid-05','type': 2,'T': 6.0,'H': 60},
             'P03': {'d': 'ebola','type': 1,'T': 4.0,'H': 40},
             'P04': {'d': 'yellow-fever','type': 2,'T': 6.0,'H': 40},
@@ -57,7 +57,7 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     stationary (stateless) processes.
 
     Note that the values of these columns may be replaced with values from
-    a stateful generator later on in the data generation process.
+    a stateful generator in the data generation process.
 
     Arguments:
         nb_records: How many rows of data to generate
@@ -98,9 +98,9 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
 
 def _generateFaultyValue(df: pd.DataFrame, 
             nb_wrong_records:int =int( NB_WRONG_RECORDS * PER_NB_WRONG_RECORDS), 
-            nb_times:int = NB_WRONG_RECORD_SERIE, 
+            nb_times:int = NB_WRONG_RECORD_SERIE,
             attribute:str = "kilowatts", 
-            mean:float=0, sigma:float=1):
+            mean:float=0, sigma:float = 3):
         
         """
         Generate nb_wrong_records records nb_times times in the data set on a specific column, 
@@ -189,7 +189,7 @@ class ReeferSimulator:
         _generateFaultyValue(df, 
             int(nb_records * PER_NB_WRONG_RECORDS),
             NB_WRONG_RECORD_SERIE,
-            "kilowatts", 0, 0)
+            "kilowatts", POWER_LEVEL, 3 * SIGMA_BASE)
         for i in range(0, df['kilowatts'].size - 1):
             if (df.at[i,"kilowatts"] <= 0  and df.at[i + 1 ,"kilowatts"] <= 0):
                 df.at[i,"maintenance_required"] = 1
@@ -230,10 +230,10 @@ class ReeferSimulator:
                 int(nb_records * PER_NB_WRONG_RECORDS), 
                 NB_WRONG_RECORD_SERIE,
                 "carbon_dioxide_level",
-                3*CO2_LEVEL, 2*SIGMA_BASE)
+                1.5 * CO2_LEVEL, 3 * SIGMA_BASE)
         for i in range(0, df['carbon_dioxide_level'].size):
             currentCO2 = df.at[i,"carbon_dioxide_level"]
-            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 2.7 * CO2_LEVEL) or (currentCO2 < 0)) else 0
+            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 12 ) or (currentCO2 < 0)) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
@@ -302,10 +302,10 @@ class ReeferSimulator:
                 int(nb_records * PER_NB_WRONG_RECORDS), 
                 NB_WRONG_RECORD_SERIE,
                 "temperature",
-                products[product_id]['T'], 2*SIGMA_BASE)
+                products[product_id]['T'] + 20 , 3 * SIGMA_BASE)
         for i in range(0, df['temperature'].size):
             currentT = df.at[i,"temperature"]
-            df.at[i,"maintenance_required"] = 1 if ( currentT > 12) else 0
+            df.at[i,"maintenance_required"] = 1 if ( np.abs(products[product_id]['T'] - currentT) > 20 ) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
     def generateTemperatureTuples(self,

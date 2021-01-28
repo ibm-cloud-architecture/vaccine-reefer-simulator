@@ -10,8 +10,8 @@ parameters:
     schema:
         $ref: "#/definitions/Control"
     example:
-        containerID: C02
-        simulation: co2sensor | temperature | o2sensor | poweroff
+        containerID: covid-19
+        simulation: co2sensor | temperature | o2sensor | poweroff | normal
         nb_of_records: 25
         product_id: P01
 responses:
@@ -30,10 +30,10 @@ definitions:
         properties:
             containerID:
                 type: string
-                enum: [C01, C02, C03, C04, C05]
+                enum: [C01, C02, C03, C04, C05, C06]
             simulation:
                 type: string
-                enum: [co2sensor, temperature, o2sensor, poweroff]
+                enum: [co2sensor, temperature, o2sensor, poweroff, normal]
             nb_of_records:
                 type: integer
                 minimum: 1

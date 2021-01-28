@@ -41,7 +41,7 @@ def parseArguments():
     if len(sys.argv) == 1:
         print("Usage reefer_simulator --stype [poweroff | co2sensor | o2sensor | temperature | normal]")
         print("\t --cid [C01 | C02 | C03 | C04]")
-        print("\t --product_id [ P01 | P02 | P03 | P04 ]")
+        print("\t --product_id [ P01 | covid-19| P02 | P03 | P04 ]")
         print("\t --records <the number of records to generate>")
         print("\t --file <the filename to create (without .csv)>")
         print("\t --append")

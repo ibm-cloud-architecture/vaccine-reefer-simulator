@@ -19,6 +19,7 @@ docker push ibmcase/vaccine-reefer-simulator
 
 ## Run locally
 
+
 ### Run with remote Kafka cluster deployed on OpenShift
 
 * Get user and pem from event streams instance to be used:
@@ -50,17 +51,34 @@ docker push ibmcase/vaccine-reefer-simulator
 * In the shell session start the app with `python app.py`
 * Use your web browser to access [http://localhost:5000](http://localhost:5000) to access the swagger.
 
-### Run with local kafka
+### Run the simulator as a standalone program
+
+It is possible to use a standalone tool to create csv file. Here is an example on how to do that using python:
+
+```shell
+# Create normal records
+python reefer_simulator_tool.py --stype norma --cid C01 --product_id covid-19 --records 1000 --file telemetries.csv 
+# Append errors on temperature (18% faulty records)
+python reefer_simulator_tool.py --stype temperature --cid C01 --product_id covid-19 --records 700 --file telemetries.csv --append
+# Append errors on co2sensor 
+python reefer_simulator_tool.py --stype co2sensor --cid C01 --product_id covid-19 --records 700 --file telemetries.csv --append
+# append errors for o2sensor
+python reefer_simulator_tool.py --stype o2sensor --cid C01 --product_id covid-19 --records 700 --file telemetries.csv --append
+```
+
+### Run with local Kafka
 
 The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
 
-`appsody run --network network_name --docker-options "--env KAFKA_BROKERS=$KAFKA_BROKERS --env KAFKA_APIKEY=$KAFKA_APIKEY --env KAFKA_CERT=$KAFKA_CER" <docker image name>`
+Use the startPython environment:
 
-or using docker run once the image is built.
+```shell
+./scripts/startPythonEnv.sh LOCAL
+# then in the container shell
+python app.py
+```
 
-`docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_CERT=$KAFKA_CERT -p 8080:8080 ibmcase/vaccine-reefer-simulator:v1.0.0`
-
-[http://localhost:8080/](http://localhost:8080/) will go directly to the Open API user interface.
+[http://localhost:8080/](http://localhost:5000/) will go directly to the Open API user interface.
 
 
 ## Running on OpenShift
