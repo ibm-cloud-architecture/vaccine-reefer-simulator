@@ -10,10 +10,10 @@ parameters:
     schema:
         $ref: "#/definitions/Control"
     example:
-        containerID: covid-19
+        containerID: C01
         simulation: co2sensor | temperature | o2sensor | poweroff | normal
         nb_of_records: 25
-        product_id: P01
+        product_id: covid-19
 responses:
     202:
         description: A successful reply
@@ -37,7 +37,7 @@ definitions:
             nb_of_records:
                 type: integer
                 minimum: 1
-                maximum: 100000
+                maximum: 10000
             product_id: 
                 type: string
                 enum: [P01,P02,P03,P04,covid-19]

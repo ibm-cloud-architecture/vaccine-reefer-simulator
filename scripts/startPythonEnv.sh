@@ -13,7 +13,7 @@ fi
 
 if [[ $kcenv == "LOCAL" ]]
 then
-  docker run -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
+  docker run -e DISPLAY=$IPADDR:0 -v $(pwd):/app -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
      --network vaccine-reefer-simulator_default -p 5000:5000  \
