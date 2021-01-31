@@ -92,4 +92,4 @@ spec:
       volumes:
       - name: eventstreams-pem
         secret:
-          secretName: kafka-cluster-ca-cert
+          secretName: eda-dev-cluster-ca-cert

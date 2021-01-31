@@ -1,4 +1,4 @@
-Control the reefer telemetry simulation. The supported simulations are: co2sensor, power, o2sensor
+Control the reefer telemetry simulation. The supported simulations are: co2sensor, power, o2sensor, temperature, normal
 ---
 consumes:
     - application-json

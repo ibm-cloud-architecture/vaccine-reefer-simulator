@@ -1,0 +1,8 @@
+Controller version
+Return the version of the service.
+---
+responses:
+  200:
+    description: The version of the service
+    examples:
+      version: v0.0.1

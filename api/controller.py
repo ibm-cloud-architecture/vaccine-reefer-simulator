@@ -1,5 +1,5 @@
 
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, jsonify
 import logging
 from flasgger import swag_from
 from flask_restful import Resource, Api
@@ -24,8 +24,9 @@ class SimulationController(Resource):
         self.simulator = ReeferSimulator()
         self.metricsProducer = MetricsEventsProducer()
 
+    @swag_from('version.yaml')
     def get(self):
-        return {"status": "success", "message": "pong!"}
+        return jsonify({"version": "v0.0.2"})
     
 
     def sendEvents(self,metrics):
