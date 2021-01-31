@@ -148,6 +148,27 @@ Once deployed, you can access the Swagger-based REST API via the defined route a
 4. Click **Execute**
 5. Verify the telemetries are created in the `telemetries` topic.
 
+### Testing
+
+#### Unit test the Simulator
+
+The test coverage for this project is not great yet. 
+
+```shell
+cd ./scripts
+./startPythonEnv.sh
+root@1de81b16f940:/# python test/unit/TestSimulator.py
+```
+
+#### Functional testing
+
+To be able to run locally, you need a Kafka simple cluster. We have defined a docker compose for that, see [previous section](#run).
+
+Use the web browser or a Postman to go to the URL: [http://localhost:8080/control](http://localhost:8080/control) and do a POST. Here is an image of the open API UI:
+
+![](images/simulapp-control-openapi.png)
+
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

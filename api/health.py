@@ -1,5 +1,4 @@
 from flask import Blueprint,jsonify
-from flasgger import Swagger
 
 health_blueprint = Blueprint("health", __name__)
 
