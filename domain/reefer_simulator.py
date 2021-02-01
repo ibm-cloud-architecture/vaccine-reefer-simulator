@@ -178,6 +178,21 @@ class ReeferSimulator:
         df["measurement_time"] = _generateTimestamps(nb_records, start_time)
         return df[ReeferSimulator.COLUMN_NAMES]
 
+    def generateNormalTuples(self,
+                               cid: str = "C01",
+                               nb_records: int = MAX_RECORDS,
+                               product_id: str = 'P02',
+                               start_time: datetime.datetime = None):
+        '''
+        Generate an array of tuples with reefer container values
+
+        Returns an array of Python tuples, where the order of fields in the tuples
+        the same as that in ReeferSimulator.COLUMN_NAMES.
+        '''
+        df = self.generateNormalRecords(
+            cid, nb_records, product_id, start_time)
+        return list(df.to_records(index=False))
+    
     def generatePowerOffRecords(self,
                                 cid: str = "C01",
                                 nb_records: int = MAX_RECORDS,
