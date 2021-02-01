@@ -67,6 +67,11 @@ spec:
             value: "True"
           - name: FLASK_DEBUG
             value: "False"
+          - name: KAFKA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: app-scram
         expose: true
         volumeMounts:
         - name: eventstreams-pem
