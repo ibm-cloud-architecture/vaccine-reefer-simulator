@@ -145,6 +145,7 @@ class ReeferSimulator:
     SIMUL_O2 = "o2sensor"
     SIMUL_TEMPERATURE = "temperature"
     NORMAL = "normal"
+    TEMP_GROWTH = "tempgrowth"
     # try to match the name in the database too
     COLUMN_NAMES = ["container_id", "measurement_time", "product_id",
                     "temperature", "target_temperature", "ambiant_temperature",
@@ -351,6 +352,33 @@ class ReeferSimulator:
             cid, nb_records, product_id, start_time)
         return list(df.to_records(index=False))
 
+    def generateTemperatureGrowthTuples(self,
+                                  cid: str = "C01",
+                                  nb_records: int = MAX_RECORDS,
+                                  product_id: str = 'P01',
+                                  start_time: datetime.datetime = None):
+        df = self.generateTemperatureGrowthRecords(
+            cid, nb_records, product_id, start_time)
+        return list(df.to_records(index=False))
+
+    def generateTemperatureGrowthRecords(self,
+                                   cid: str = "C01",
+                                   nb_records: int = MAX_RECORDS,
+                                   product_id: str = 'P01',
+                                   start_time: datetime.datetime = None):
+        '''
+        Generate a dataframe of training data for temperature sensor malfunctions.
+
+        Returns a Pandas dataframe with the schema given in
+        ReeferSimulator.COLUMN_NAMES.
+        '''
+        logging.info("Generating records for Temperature growth")
+        df = self.generateNormalRecords(
+            cid, nb_records, product_id, start_time)
+        startAt=np.round(nb_records/3)
+        for i in range(startAt, df['temperature'].size):
+            df.at[i, "temperature"]+=2
+        return df[ReeferSimulator.COLUMN_NAMES]
 
 if __name__ == '__main__':
     simul = ReeferSimulator()

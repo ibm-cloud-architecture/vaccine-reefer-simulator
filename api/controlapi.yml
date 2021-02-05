@@ -10,9 +10,9 @@ parameters:
     schema:
         $ref: "#/definitions/Control"
     example:
-        containerID: C01
-        simulation: co2sensor | temperature | o2sensor | poweroff | normal
-        nb_of_records: 25
+        containerID: C11
+        simulation: tempgrowth | co2sensor | temperature | o2sensor | poweroff | normal 
+        nb_of_records: 250
         product_id: covid-19
 responses:
     202:
