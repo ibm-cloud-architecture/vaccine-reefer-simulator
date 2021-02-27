@@ -375,9 +375,12 @@ class ReeferSimulator:
         logging.info("Generating records for Temperature growth")
         df = self.generateNormalRecords(
             cid, nb_records, product_id, start_time)
-        startAt=np.round(nb_records/3)
+        startAt=np.int(np.round(nb_records/3))
+        base_temp = df.at[startAt, "temperature"]
         for i in range(startAt, df['temperature'].size):
-            df.at[i, "temperature"]+=2
+            if base_temp < df.at[i, "ambiant_temperature"]:
+                base_temp = base_temp + 2
+            df.at[i, "temperature"] = base_temp
         return df[ReeferSimulator.COLUMN_NAMES]
 
 if __name__ == '__main__':

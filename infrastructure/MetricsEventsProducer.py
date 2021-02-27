@@ -2,7 +2,7 @@ from confluent_kafka import Producer
 import json, datetime, logging
 import os
 
-KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','')
+KAFKA_BROKERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS','')
 KAFKA_CERT = os.getenv('KAFKA_CERT','')
 KAFKA_USER =  os.getenv('KAFKA_USER','')
 KAFKA_PASSWORD =  os.getenv('KAFKA_PASSWORD','')

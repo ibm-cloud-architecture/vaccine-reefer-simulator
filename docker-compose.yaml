@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2'
 services:
   zookeeper:
     image: strimzi/kafka:latest-kafka-2.6.0

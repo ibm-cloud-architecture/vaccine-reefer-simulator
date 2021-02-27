@@ -5,8 +5,6 @@ The _simulator_ component is a Python-based application for generating anomalous
 You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
 The last updated detailed documentation of this component is under [this chapter](https://ibm-cloud-architecture.github.io/vaccine-solution-main/solution/reefer-iot/).
 
-## Installation
-
 
 ## Build
 
@@ -41,6 +39,7 @@ docker push ibmcase/vaccine-reefer-simulator
   # NAME      AUTHENTICATION   AUTHORIZATION
   # app-scram  scram-sha-512    simple
   ```
+  
 * Decode the user's password using its secret: with `oc -n eventstreams get secret app-scram -o jsonpath='{.data.password}'  | base64 --decode`
 
 * Modify the environment variables in the `scripts/setenv-tmpl.sh` to reflect the user and broker URLs under the OCP condition

@@ -3,6 +3,7 @@ from flasgger import Swagger
 
 import os, time, logging
 from datetime import datetime
+from api.uispa import ui_blueprint
 from api.health import health_blueprint
 from api.controller import control_blueprint
 from api.prometheus import metrics_blueprint
@@ -42,12 +43,12 @@ app = Flask(__name__)
 app.register_blueprint(control_blueprint)
 app.register_blueprint(health_blueprint)
 app.register_blueprint(metrics_blueprint)
-
+app.register_blueprint(ui_blueprint)
 swagger = Swagger(app, template=swagger_template)
 
 # It is considered bad form to return an error for '/', so let's redirect to the apidocs
-@app.route('/')
-def index():
+@app.route('/api')
+def apidoc():
   return redirect('/apidocs')
 
 
