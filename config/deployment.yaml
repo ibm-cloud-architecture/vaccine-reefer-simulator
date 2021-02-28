@@ -1,37 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: vaccine-reefer-simulator
-  labels:
-    name: vaccine-reefer-simulator
-    app: vaccine-reefer-simulator
-spec:
-  ports:
-    - name: web
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
-  selector:
-    app: vaccine-reefer-simulator
-  type: ClusterIP
-  sessionAffinity: None
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: vaccine-reefer-simulator
-  labels:
-    app: vaccine-reefer-simulator
-spec:
-  path: /
-  to:
-    kind: Service
-    name: vaccine-reefer-simulator
-    weight: 100
-  port:
-    targetPort: 5000
-  wildcardPolicy: None
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -56,10 +22,10 @@ spec:
         - containerPort: 5000
           protocol: TCP
         envFrom:
-          - configMapRef:
-              name: reefer-simul-cm
           - secretRef:
               name: reefer-simul-secret
+          - configMapRef:
+              name: reefer-simul-cm
         env:
           - name: PYTHONUNBUFFERED
             value: "yes"
@@ -67,6 +33,15 @@ spec:
             value: "True"
           - name: FLASK_DEBUG
             value: "False"
+          - name: KAFKA_USER
+            value: scram-user
+          - name: KAFKA_CERT
+            value: /app/certs/ca.crt
+          - name: KAFKA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: scram-user
         expose: true
         volumeMounts:
         - name: eventstreams-pem
