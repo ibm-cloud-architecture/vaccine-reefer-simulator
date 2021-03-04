@@ -43,7 +43,7 @@ app = Flask(__name__)
 app.register_blueprint(control_blueprint)
 app.register_blueprint(health_blueprint)
 app.register_blueprint(metrics_blueprint)
-# app.register_blueprint(ui_blueprint)
+app.register_blueprint(ui_blueprint)
 swagger = Swagger(app, template=swagger_template)
 
 # It is considered bad form to return an error for '/', so let's redirect to the apidocs
