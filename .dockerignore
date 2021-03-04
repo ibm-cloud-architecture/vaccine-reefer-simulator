@@ -11,6 +11,10 @@
 docker-compose.yml
 .docker
 
+# Node
+node_modules
+npm-debug.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 */__pycache__/
