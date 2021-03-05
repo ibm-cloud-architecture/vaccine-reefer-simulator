@@ -47,7 +47,7 @@ app.register_blueprint(ui_blueprint)
 swagger = Swagger(app, template=swagger_template)
 
 # It is considered bad form to return an error for '/', so let's redirect to the apidocs
-@app.route('/')
+@app.route('/apidocs')
 def apidoc():
   return redirect('/apidocs')
 

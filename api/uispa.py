@@ -6,7 +6,7 @@ ui_blueprint = Blueprint("ui-spa", __name__,
     static_url_path='/'
 )
 
-@ui_blueprint.route("/home")
+@ui_blueprint.route("/")
 def index():
     return render_template("index.html")
 
