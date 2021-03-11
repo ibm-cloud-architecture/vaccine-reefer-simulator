@@ -1,18 +1,46 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ReeferInfo />
+    <div class="separator"></div>
+    <div class="right-panel">
+      <LiveCharts />
+      <ReeferControl />
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ReeferInfo from "@/components/ReeferInfo.vue";
+import ReeferControl from "@/components/ReeferControl.vue";
+import LiveCharts from "@/components/LiveCharts.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
+    ReeferInfo,
+    ReeferControl,
+    LiveCharts,
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.home {
+  padding: 50px;
+  display: flex;
+  flex-direction: row;
+
+  .separator {
+    background-color: #e0e0e0;
+    width: 1px;
+    height: calc(100vh - 150px);
+  }
+
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
   }
 }
-</script>
+</style>
