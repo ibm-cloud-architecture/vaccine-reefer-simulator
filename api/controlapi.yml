@@ -33,11 +33,11 @@ definitions:
                 enum: [C01, C02, C03, C04, C05, C06]
             simulation:
                 type: string
-                enum: [co2sensor, temperature, o2sensor, poweroff, normal]
+                enum: [tempgrowth, co2sensor, temperature, o2sensor, poweroff, normal]
             nb_of_records:
                 type: integer
                 minimum: 1
-                maximum: 10000
+                maximum: 5000
             product_id: 
                 type: string
                 enum: [P01,P02,P03,P04,covid-19]
