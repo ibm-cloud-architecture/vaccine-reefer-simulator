@@ -38,6 +38,7 @@ export default {
   .separator {
     background-color: #e0e0e0;
     width: 1px;
+    min-width: 1px;
     height: calc(100vh - 150px);
   }
 
