@@ -1,32 +1,37 @@
 <template>
   <div class="home">
-    <ReeferInfo />
+    <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">
       <LiveCharts />
-      <ReeferControl />
     </div>
   </div>
 </template>
 
 <script>
 import ReeferInfo from "@/components/ReeferInfo.vue";
-import ReeferControl from "@/components/ReeferControl.vue";
 import LiveCharts from "@/components/LiveCharts.vue";
 
 export default {
   name: "Home",
   components: {
     ReeferInfo,
-    ReeferControl,
     LiveCharts,
+  },
+  data() {
+    return {
+      container: {
+        id: "C01",
+        product: { id: "P01", amount: 50000 },
+      },
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .home {
-  padding: 50px;
+  padding: 50px 0;
   display: flex;
   flex-direction: row;
 

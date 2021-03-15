@@ -11,6 +11,10 @@ import Header from "@/components/Header.vue";
 export default {
   name: "App",
   components: { Header },
+  async mounted() {
+    const data = await fetch("http://localhost:5000/health");
+    console.log(await data.json());
+  },
 };
 </script>
 

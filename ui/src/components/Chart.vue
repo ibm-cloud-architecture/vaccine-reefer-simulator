@@ -7,7 +7,7 @@ const opts = {
   maintainAspectRatio: false,
   tooltips: {
     callbacks: {
-      label: function(tooltipItem) {
+      label: function (tooltipItem) {
         return tooltipItem.yLabel;
       },
     },
@@ -20,15 +20,24 @@ const opts = {
         },
       },
     ],
+    yAxes: [
+      {
+        ticks: {
+          min: 0,
+  },
+      },
+    ],
   },
 };
+
+import { mergeDeep } from "@/tools.js";
 
 export default {
   extends: Line,
   mixins: [reactiveProp],
   props: ["chartData", "options"],
   mounted() {
-    this.renderChart(this.chartData, opts);
+    this.renderChart(this.chartData, mergeDeep(opts, this.options));
   },
 };
 </script>

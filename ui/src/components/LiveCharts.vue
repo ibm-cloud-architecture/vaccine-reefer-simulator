@@ -1,7 +1,7 @@
 <template>
   <div class="charts">
-    <Chart :chartData="tempData" />
-    <Chart :chartData="co2Data" />
+    <Chart class="chart" :chartData="tempData" :options="tempOptions" />
+    <Chart class="chart" :chartData="co2Data" :options="co2Options" />
   </div>
 </template>
 
@@ -17,45 +17,68 @@ export default {
   },
   mounted() {
     for (let index = 0; index < SECS; index++) {
-      this.temperatures.push(22.5);
+      this.temperatures.push(-72.5);
       this.temperatures_timestamps.push(new Date());
-      this.co2values.push(122.5);
+      this.co2values.push(408.5);
       this.co2values_timestamps.push(new Date());
     }
     setInterval(() => {
-      this.addTemperaturePoint(Math.random() * 5 + 20, new Date());
-      this.addCO2Point(Math.random() * 5 + 120, new Date());
+      this.addTemperaturePoint(Math.random() * 5 - 70, new Date());
+      this.addCO2Point(Math.random() * 5 + 408, new Date());
     }, 500);
   },
-  data: function() {
+  data: function () {
     return {
       temperatures: [],
       temperatures_timestamps: [],
       co2values: [],
       co2values_timestamps: [],
+      tempOptions: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: -80,
+                
+              }
+            }
+          ]
+        }
+      },
+      co2Options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0
+              }
+            }
+          ]
+        }
+      }
     };
   },
   computed: {
-    tempData: function() {
+    tempData: function () {
       return {
         labels: this.temperatures_timestamps,
         datasets: [
           {
             label: "Temperature (C)",
-            backgroundColor: "#d05659",
-            borderColor: "#d05659",
+            backgroundColor: "#b51818",
+            borderColor: "#b51818",
             data: this.temperatures,
             fill: false,
           },
         ],
       };
     },
-    co2Data: function() {
+    co2Data: function () {
       return {
         labels: this.co2values_timestamps,
         datasets: [
           {
-            label: "CO₂ (g/m³)",
+            label: "CO₂ (ppm)",
             backgroundColor: "#00b97c",
             borderColor: "#00b97c",
             data: this.co2values,
@@ -66,7 +89,7 @@ export default {
     },
   },
   methods: {
-    addTemperaturePoint: function(value, time) {
+    addTemperaturePoint: function (value, time) {
       this.temperatures.push(value);
       this.temperatures_timestamps.push(time);
 
@@ -75,7 +98,7 @@ export default {
         this.temperatures_timestamps.shift();
       }
     },
-    addCO2Point: function(value, time) {
+    addCO2Point: function (value, time) {
       this.co2values.push(value);
       this.co2values_timestamps.push(time);
 
@@ -92,7 +115,11 @@ export default {
 .charts {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  max-height: 200px;
+  flex-wrap: wrap;
+
+  .chart {
+    max-height: 200px;
+    margin-right: 20px;
+  }
 }
 </style>
