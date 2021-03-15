@@ -40,6 +40,11 @@ log.setLevel(logging.ERROR)
 # Application specifics
 app = Flask(__name__)
 
+if os.environ.get('REMOTE_CONTAINERS'):
+  print("We are in a DevContainer: Enabling CORS")
+  from flask_cors import CORS
+  CORS(app)
+
 app.register_blueprint(control_blueprint)
 app.register_blueprint(health_blueprint)
 app.register_blueprint(metrics_blueprint)
