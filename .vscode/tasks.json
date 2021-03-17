@@ -42,6 +42,34 @@
             "command": "appsody stop",
             "group": "build",
             "problemMatcher": []
+        },
+        {
+            "label": "Client Dev",
+            "type": "shell",
+            "command": "yarn serve",
+            "options": {
+                "cwd": "${workspaceFolder}/ui"
+            },
+            "presentation": {
+                "panel": "dedicated",
+                "group": "dev"
+            }
+        },
+        {
+            "label": "Server Dev",
+            "type": "shell",
+            "command": "gunicorn -w 4 -b 0.0.0.0:5000 --reload app:app",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "dev"
+            }
+        },
+        {
+            "label": "DEV",
+            "dependsOn": [
+                "Client Dev",
+                "Server Dev"
+            ]
         }
     ]
 }
