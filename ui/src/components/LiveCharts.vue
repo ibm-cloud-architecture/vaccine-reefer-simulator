@@ -1,7 +1,7 @@
 <template>
   <div class="charts">
-    <Chart class="chart" :chartData="tempData" :options="tempOptions" />
-    <Chart class="chart" :chartData="co2Data" :options="co2Options" />
+    <Chart class="chart" :chartData="tempData" :min="tempMinMax.min" :max="tempMinMax.max" />
+    <Chart class="chart" :chartData="co2Data" :min="co2MinMax.min" :max="co2MinMax.max" />
   </div>
 </template>
 
@@ -9,6 +9,9 @@
 import Chart from "@/components/Chart.vue";
 
 const SECS = 20;
+const TEMP_PADDING = 20;
+const CO2_PADDING = 40;
+const round = (input) => Math.round(input / 5) * 5
 
 export default {
   name: "LiveCharts",
@@ -33,32 +36,19 @@ export default {
       temperatures_timestamps: [],
       co2values: [],
       co2values_timestamps: [],
-      tempOptions: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                min: -80,
-                
-              }
-            }
-          ]
-        }
-      },
-      co2Options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                min: 0
-              }
-            }
-          ]
-        }
-      }
     };
   },
   computed: {
+    tempMinMax: function () {
+      let min = round(Math.min(...this.temperatures) - TEMP_PADDING);
+      let max = round(Math.max(...this.temperatures) + TEMP_PADDING);
+      return {min, max};
+    },
+    co2MinMax: function () {
+      let min = round(Math.min(...this.co2values) - CO2_PADDING);
+      let max = round(Math.max(...this.co2values) + CO2_PADDING);
+      return {min, max};
+    },
     tempData: function () {
       return {
         labels: this.temperatures_timestamps,

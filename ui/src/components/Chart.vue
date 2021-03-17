@@ -16,24 +16,25 @@ const opts = {
         },
       },
     ],
-    yAxes: [
-      {
-        ticks: {
-          min: 0,
-        },
-      },
-    ],
   },
 };
-
-import { mergeDeep } from "@/tools.js";
 
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  props: ["chartData", "options"],
+  props: ["chartData", "min", "max"],
   mounted() {
-    this.renderChart(this.chartData, mergeDeep(opts, this.options));
+    this.renderChart(this.chartData, opts);
+  },
+  watch: {
+    min(min) {
+      this.$data._chart.options.scales.yAxes[0].ticks.min = min;
+      this.$data._chart.update();
+    },
+    max(max) {
+      this.$data._chart.options.scales.yAxes[0].ticks.max = max;
+      this.$data._chart.update();
+    },
   },
 };
 </script>
