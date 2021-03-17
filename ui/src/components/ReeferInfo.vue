@@ -8,7 +8,16 @@
       <template slot="items">
         <cv-structured-list-item>
           <cv-structured-list-heading>Container ID</cv-structured-list-heading>
-          <cv-structured-list-data>{{ container.id }}</cv-structured-list-data>
+          <cv-structured-list-data>
+            <cv-combo-box
+              :auto-filter="true"
+              :auto-highlight="true"
+              :value="container.id"
+              :options="containersOptions"
+              @change="changeContainer"
+            >
+            </cv-combo-box>
+          </cv-structured-list-data>
         </cv-structured-list-item>
 
         <cv-structured-list-item>
@@ -29,7 +38,7 @@
         <cv-structured-list-item>
           <cv-structured-list-heading>Simulation</cv-structured-list-heading>
           <cv-structured-list-data>
-            <div class="simulator-selector">
+            <div class="simulation-selector">
               <cv-dropdown :value="simulation" v-model="simulation">
                 <cv-dropdown-item
                   v-for="simulation in simulations"
@@ -60,7 +69,7 @@ import Checkmark32 from "@carbon/icons-vue/es/checkmark/32";
 
 export default {
   name: "ReeferInfo",
-  props: ["container"],
+  props: ["container", "containers"],
   data() {
     return {
       icon: Checkmark32,
@@ -75,7 +84,26 @@ export default {
       ],
     };
   },
+  computed: {
+    containersOptions: {
+      get() {
+        return this.containers.map((c) => ({
+          name: c.id,
+          label: c.id,
+          value: c.id,
+        }));
+      },
+    },
+  },
   methods: {
+    changeContainer(container) {
+      if (container) {
+        this.$router.push({
+          name: "ContainerDetail",
+          params: { id: container },
+        });
+      }
+    },
     async runSimulation() {
       const load = {
         containerID: this.container.id,
@@ -120,7 +148,11 @@ export default {
     }
   }
 
-  .simulator-selector {
+  .bx--list-box__selection {
+    display: none; // Hide container selector "clear" button
+  }
+
+  .simulation-selector {
     display: flex;
     width: 250px;
 

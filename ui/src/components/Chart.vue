@@ -6,7 +6,7 @@ const opts = {
   responsive: true,
   maintainAspectRatio: false,
   tooltips: {
-    enabled: false
+    enabled: false,
   },
   scales: {
     xAxes: [
