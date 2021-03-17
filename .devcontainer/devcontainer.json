@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/python-3
 {
-	"name": "Python 3",
+	"name": "Python 3 + Node",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
@@ -49,7 +49,7 @@
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [5000, 8080],
+	"forwardPorts": [5000, 4200],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip3 install --user -r requirements.txt",
