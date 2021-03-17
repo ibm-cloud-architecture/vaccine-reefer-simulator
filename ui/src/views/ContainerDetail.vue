@@ -1,5 +1,5 @@
 <template>
-  <div class="container-detail" v-if="container">
+  <div class="container-detail">
     <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">

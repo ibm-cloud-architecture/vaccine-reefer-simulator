@@ -2,14 +2,17 @@
   <div class="reefer-info">
     <img alt="Reefer" src="../assets/reefer.png" />
 
-    <cv-tag class="tag" kind="green" label="Everything OK" />
+    <cv-tag class="tag" kind="green" v-if="container" label="Everything OK" />
+    <cv-tag-skeleton class="tag" v-if="!container" />
 
     <cv-structured-list>
       <template slot="items">
         <cv-structured-list-item>
           <cv-structured-list-heading>Container ID</cv-structured-list-heading>
           <cv-structured-list-data>
+            <cv-dropdown-skeleton v-if="!container" />
             <cv-combo-box
+              v-if="container"
               :auto-filter="true"
               :auto-highlight="true"
               :value="container.reeferID"
@@ -22,22 +25,25 @@
 
         <cv-structured-list-item>
           <cv-structured-list-heading>Product</cv-structured-list-heading>
-          <cv-structured-list-data>{{
-            container.product.id
-          }}</cv-structured-list-data>
+          <cv-structured-list-data>
+            <span v-if="container">{{ container.product.id }}</span>
+            <cv-skeleton-text v-if="!container" />
+          </cv-structured-list-data>
         </cv-structured-list-item>
 
         <cv-structured-list-item>
           <cv-structured-list-heading># records</cv-structured-list-heading>
           <cv-structured-list-data>
             <div class="row">
+              <cv-button-skeleton v-if="!container" />
               <cv-number-input
+                v-if="container"
                 :min="0"
                 :max="container.capacity"
                 v-model="container.product.amount"
               >
               </cv-number-input>
-              <span> / {{ container.capacity }}</span>
+              <span v-if="container"> / {{ container.capacity }}</span>
             </div>
           </cv-structured-list-data>
         </cv-structured-list-item>
@@ -46,7 +52,11 @@
           <cv-structured-list-heading>Simulation</cv-structured-list-heading>
           <cv-structured-list-data>
             <div class="simulation-selector">
-              <cv-dropdown :value="simulation" v-model="simulation">
+              <cv-dropdown
+                :value="simulation"
+                v-if="container"
+                v-model="simulation"
+              >
                 <cv-dropdown-item
                   v-for="simulation in simulations"
                   :key="simulation.type"
@@ -55,6 +65,7 @@
                 >
               </cv-dropdown>
               <cv-icon-button
+                v-if="container"
                 kind="primary"
                 :icon="icon"
                 :disabled="!simulation"
@@ -63,6 +74,7 @@
                 tip-position="bottom"
                 tip-alignment="center"
               />
+              <cv-button-skeleton v-if="!container" />
             </div>
           </cv-structured-list-data>
         </cv-structured-list-item>
