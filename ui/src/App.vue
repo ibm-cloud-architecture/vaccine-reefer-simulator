@@ -12,6 +12,7 @@ export default {
   name: "App",
   components: { Header },
   async mounted() {
+    this.$store.dispatch("loadContainers")
     const data = await fetch("http://localhost:5000/health");
     console.log(await data.json());
   },

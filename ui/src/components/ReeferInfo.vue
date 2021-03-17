@@ -65,11 +65,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Checkmark32 from "@carbon/icons-vue/es/checkmark/32";
 
 export default {
   name: "ReeferInfo",
-  props: ["container", "containers"],
+  props: ["container"],
   data() {
     return {
       icon: Checkmark32,
@@ -85,6 +86,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["containers"]),
     containersOptions: {
       get() {
         return this.containers.map((c) => ({
@@ -131,6 +133,7 @@ export default {
 
   img {
     width: 300px;
+    min-height: 225px;
   }
 
   .tag {

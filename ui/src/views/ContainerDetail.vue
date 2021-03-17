@@ -1,6 +1,6 @@
 <template>
   <div class="container-detail" v-if="container">
-    <ReeferInfo :container="container" :containers="containers" />
+    <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">
       <LiveCharts />
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import ReeferInfo from "@/components/ReeferInfo.vue";
 import LiveCharts from "@/components/LiveCharts.vue";
 
@@ -21,35 +22,29 @@ export default {
   },
   mounted() {
     this.loadContainerByIdInRoute();
-    if (!this.container) {
-      this.$router.push("/home");
-    }
   },
   watch: {
-    "$route.params.id": {
-      handler: function () {
+    containers: function () {
         this.loadContainerByIdInRoute();
       },
-      immediate: true,
+    "$route.params.id": function () {
+      this.loadContainerByIdInRoute();
     },
   },
   methods: {
     loadContainerByIdInRoute() {
-      this.container = this.containers.find(
-        (c) => c.id === this.$route.params.id
-      );
+      this.container = this.getContainerById(this.$route.params.id);
+      if (this.containers.length > 0 && !this.container) {
+        this.$router.push("/");
+      }
     },
+  },
+  computed: {
+    ...mapGetters(["getContainerById", "containers"]),
   },
   data() {
     return {
       container: null,
-      containers: [
-        { id: "C01", product: { id: "P01", amount: 10000 } },
-        { id: "C02", product: { id: "P01", amount: 20000 } },
-        { id: "C03", product: { id: "P01", amount: 30000 } },
-        { id: "C04", product: { id: "P01", amount: 40000 } },
-        { id: "C05", product: { id: "P01", amount: 50000 } },
-      ],
     };
   },
 };
