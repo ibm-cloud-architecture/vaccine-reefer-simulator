@@ -6,11 +6,7 @@ const opts = {
   responsive: true,
   maintainAspectRatio: false,
   tooltips: {
-    callbacks: {
-      label: function (tooltipItem) {
-        return tooltipItem.yLabel;
-      },
-    },
+    enabled: false
   },
   scales: {
     xAxes: [
@@ -24,7 +20,7 @@ const opts = {
       {
         ticks: {
           min: 0,
-  },
+        },
       },
     ],
   },
