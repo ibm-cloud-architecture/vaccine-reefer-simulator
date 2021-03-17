@@ -69,7 +69,8 @@
             "dependsOn": [
                 "Client Dev",
                 "Server Dev"
-            ]
+            ],
+            "problemMatcher": []
         }
     ]
 }
