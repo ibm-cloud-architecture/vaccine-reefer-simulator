@@ -1,5 +1,6 @@
 <template>
   <div class="reefer-info">
+    <img alt="Reefer" src="../assets/reefer.png" />
 
     <cv-tag class="tag" kind="green" label="Everything OK" />
 
@@ -99,6 +100,10 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 50px;
+
+  img {
+    width: 300px;
+  }
 
   .tag {
     width: max-content;
