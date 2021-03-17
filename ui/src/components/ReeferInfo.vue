@@ -12,7 +12,7 @@
             <cv-combo-box
               :auto-filter="true"
               :auto-highlight="true"
-              :value="container.id"
+              :value="container.reeferID"
               :options="containersOptions"
               @change="changeContainer"
             >
@@ -30,8 +30,15 @@
         <cv-structured-list-item>
           <cv-structured-list-heading># records</cv-structured-list-heading>
           <cv-structured-list-data>
-            <cv-number-input :label="null" v-model="container.product.amount">
-            </cv-number-input>
+            <div class="row">
+              <cv-number-input
+                :min="0"
+                :max="container.capacity"
+                v-model="container.product.amount"
+              >
+              </cv-number-input>
+              <span> / {{ container.capacity }}</span>
+            </div>
           </cv-structured-list-data>
         </cv-structured-list-item>
 
@@ -65,7 +72,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 import Checkmark32 from "@carbon/icons-vue/es/checkmark/32";
 
 export default {
@@ -90,9 +97,9 @@ export default {
     containersOptions: {
       get() {
         return this.containers.map((c) => ({
-          name: c.id,
-          label: c.id,
-          value: c.id,
+          name: c.reeferID,
+          label: c.reeferID,
+          value: c.reeferID,
         }));
       },
     },
@@ -108,7 +115,7 @@ export default {
     },
     async runSimulation() {
       const load = {
-        containerID: this.container.id,
+        containerID: this.container.reeferID,
         nb_of_records: this.container.product.amount,
         product_id: this.container.product.id,
         simulation: this.simulation,
@@ -143,6 +150,17 @@ export default {
 
   .cv-structured-list-heading {
     vertical-align: inherit;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      white-space: nowrap;
+      padding-left: 10px;
+    }
   }
 
   .bx--number {

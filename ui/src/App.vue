@@ -2,17 +2,22 @@
   <div id="app">
     <Header />
     <router-view />
-    </div>
+  </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import { serverURL } from "@/tools.js"
 
 export default {
   name: "App",
   components: { Header },
   async mounted() {
     this.$store.dispatch("loadContainers")
+
+    const reeferAlerts = new EventSource(`${serverURL}/reefers/alerts`);
+    reeferAlerts.onmessage = (message) => console.log(message);
+
     const data = await fetch("http://localhost:5000/health");
     console.log(await data.json());
   },

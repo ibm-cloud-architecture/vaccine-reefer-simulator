@@ -4,11 +4,11 @@
       <cv-tile
         class="tile"
         v-for="container in containers"
-        :key="container.id"
+        :key="container.reeferID"
         kind="clickable"
-        :to="`/containers/${container.id}`"
+        :to="`/containers/${container.reeferID}`"
       >
-        <h1>{{ container.id }}</h1>
+        <h1>{{ container.reeferID }}</h1>
         <p>Details and simulation</p>
       </cv-tile>
     </div>
