@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     containers: (state) => state.containers,
     getContainerById: (state) => (id) => {
       return state.containers.find(c => c.reeferID === id)
-  },
+    },
     notifications: (state) => state.notifications,
   },
   mutations: {
@@ -32,8 +32,17 @@ const store = new Vuex.Store({
   },
   actions: {
     async loadContainers(context) {
-      const reefersData = await fetch(`${serverURL}/reefers`);
-      const reefers = await reefersData.json();
+      try {
+        const reefersData = await fetch(`${serverURL}/reefers`);
+        const reefers = await reefersData.json();
+        context.commit("setContainers", reefers.map(r => ({ ...r, product: { id: "P01", amount: 10 } })))
+      } catch (e) {
+        const notification = {
+          title: "Network error", caption: "Unable to fetch reefers", kind: "error"
+        }
+        context.dispatch("addNotification", {notification, persistent: true})
+        console.error("loadContainers", e);
+      }
     },
     removeNotificationById(context, id) {
       context.commit("removeNotificationById", id);
