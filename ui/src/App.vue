@@ -20,6 +20,11 @@ export default {
     const reeferAlerts = new EventSource(`${freezerMgrUrl}/reefers/alerts`);
     reeferAlerts.onmessage = (message) => console.log(message);
 
+    reeferAlerts.onmessage = (message) => {
+      const alert = JSON.parse(message.data);
+      this.$store.dispatch("addAlert", alert);
+    };
+
     const data = await fetch(`${backendUrl}/health`);
     console.log(await data.json());
   },

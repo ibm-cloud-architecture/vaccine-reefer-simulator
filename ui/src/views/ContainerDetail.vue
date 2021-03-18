@@ -18,7 +18,6 @@ export default {
   components: {
     ReeferInfo,
     LiveCharts,
-    KafkaRecords,
   },
   mounted() {
     this.loadContainerByIdInRoute();

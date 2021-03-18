@@ -8,6 +8,7 @@ const store = new Vuex.Store({
   state: {
     containers: [],
     notifications: [],
+    alerts: [],
   },
   getters: {
     containers: (state) => state.containers,
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
       return state.containers.find(c => c.reeferID === id)
     },
     notifications: (state) => state.notifications,
+    alerts: (state) => state.alerts,
   },
   mutations: {
     addContainers(state, containers) {
@@ -28,7 +30,10 @@ const store = new Vuex.Store({
     },
     addNotification(state, notification) {
       state.notifications = [...state.notifications, notification]
-    }
+    },
+    addAlert(state, alert) {
+      state.alerts = [...state.alerts, alert]
+    },
   },
   actions: {
     async loadContainers(context) {
@@ -63,6 +68,9 @@ const store = new Vuex.Store({
           context.commit("removeNotificationById", notification.id)
         }, options.timeout * 1000)
       }
+    },
+    addAlert(context, alert) {
+      context.commit("addAlert", {...alert, receivedOn: new Date()});
     },
   }
 })
