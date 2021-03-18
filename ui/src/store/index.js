@@ -32,7 +32,7 @@ const store = new Vuex.Store({
       state.notifications = [...state.notifications, notification]
     },
     addAlert(state, alert) {
-      state.alerts = [...state.alerts, alert]
+      state.alerts = [{...alert, id: state.alerts.length}, ...state.alerts]
     },
   },
   actions: {
@@ -45,7 +45,7 @@ const store = new Vuex.Store({
         const notification = {
           title: "Network error", caption: "Unable to fetch reefers", kind: "error"
         }
-        context.dispatch("addNotification", {notification, persistent: true})
+        context.dispatch("addNotification", { notification, persistent: true })
         console.error("loadContainers", e);
       }
     },
@@ -53,7 +53,7 @@ const store = new Vuex.Store({
       context.commit("removeNotificationById", id);
     },
     addNotification(context, input) {
-      let notification = {...input}, options = {}
+      let notification = { ...input }, options = {}
       if (input.notification) {
         notification = input.notification
         options = input
@@ -70,7 +70,7 @@ const store = new Vuex.Store({
       }
     },
     addAlert(context, alert) {
-      context.commit("addAlert", {...alert, receivedOn: new Date()});
+      context.commit("addAlert", { ...alert, receivedOn: new Date() });
     },
   }
 })

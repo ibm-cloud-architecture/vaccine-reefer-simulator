@@ -3,7 +3,7 @@
     <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">
-      <LiveCharts />
+      <KafkaRecords :container="container" />
     </div>
   </div>
 </template>
@@ -12,12 +12,14 @@
 import { mapGetters } from "vuex";
 import ReeferInfo from "@/components/ReeferInfo.vue";
 import LiveCharts from "@/components/LiveCharts.vue";
+import KafkaRecords from "@/components/KafkaRecords.vue";
 
 export default {
   name: "ContainerDetail",
   components: {
     ReeferInfo,
     LiveCharts,
+    KafkaRecords,
   },
   mounted() {
     this.loadContainerByIdInRoute();
