@@ -9,7 +9,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import NotificationCenter from "@/components/NotificationCenter.vue";
-import { serverURL } from "@/tools.js";
+import { freezerMgrUrl, backendUrl } from "@/tools.js";
 
 export default {
   name: "App",
@@ -17,10 +17,10 @@ export default {
   async mounted() {
     this.$store.dispatch("loadContainers");
 
-    const reeferAlerts = new EventSource(`${serverURL}/reefers/alerts`);
+    const reeferAlerts = new EventSource(`${freezerMgrUrl}/reefers/alerts`);
     reeferAlerts.onmessage = (message) => console.log(message);
 
-    const data = await fetch("http://localhost:5000/health");
+    const data = await fetch(`${backendUrl}/health`);
     console.log(await data.json());
   },
 };
@@ -34,7 +34,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   background-color: #f3f3f3;
-  padding-top: 47px; // Top NavBar (cv-header) size
+  padding-top: 48px; // Top NavBar (cv-header) size
   min-height: 100vh;
 }
 </style>

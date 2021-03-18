@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { serverURL } from "@/tools.js"
+import { freezerMgrUrl } from "@/tools.js"
 
 Vue.use(Vuex)
 
@@ -33,7 +33,7 @@ const store = new Vuex.Store({
   actions: {
     async loadContainers(context) {
       try {
-        const reefersData = await fetch(`${serverURL}/reefers`);
+        const reefersData = await fetch(`${freezerMgrUrl}/reefers`);
         const reefers = await reefersData.json();
         context.commit("setContainers", reefers.map(r => ({ ...r, product: { id: "P01", amount: 10 } })))
       } catch (e) {
@@ -63,7 +63,7 @@ const store = new Vuex.Store({
           context.commit("removeNotificationById", notification.id)
         }, options.timeout * 1000)
       }
-    }
+    },
   }
 })
 
