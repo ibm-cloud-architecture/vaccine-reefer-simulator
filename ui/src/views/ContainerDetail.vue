@@ -3,7 +3,7 @@
     <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">
-      <LiveCharts/>
+      <LiveCharts :container="container" />
       <KafkaRecords :container="container" />
     </div>
   </div>

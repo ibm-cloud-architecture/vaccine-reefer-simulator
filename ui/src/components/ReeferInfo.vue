@@ -40,19 +40,20 @@
         </cv-structured-list-item>
 
         <cv-structured-list-item>
+          <cv-structured-list-heading>Product</cv-structured-list-heading>
+          <cv-structured-list-data>
+            <cv-button-skeleton v-if="!container" />
+            <cv-text-input v-if="container" v-model="product">
+            </cv-text-input>
+          </cv-structured-list-data>
+        </cv-structured-list-item>
+
+        <cv-structured-list-item>
           <cv-structured-list-heading># records</cv-structured-list-heading>
           <cv-structured-list-data>
-            <div class="row">
-              <cv-button-skeleton v-if="!container" />
-              <cv-number-input
-                v-if="container"
-                :min="0"
-                :max="container.capacity"
-                v-model="container.amount"
-              >
-              </cv-number-input>
-              <span v-if="container"> / {{ container.capacity }}</span>
-            </div>
+            <cv-button-skeleton v-if="!container" />
+            <cv-number-input v-if="container" :min="0" v-model="nb_of_records">
+            </cv-number-input>
           </cv-structured-list-data>
         </cv-structured-list-item>
 
@@ -100,6 +101,9 @@ export default {
   props: ["container"],
   data() {
     return {
+      nb_of_records: 0,
+      product: "",
+      receivedRecords: [],
       icon: Checkmark32,
       simulation: "",
       simulations: [
@@ -124,6 +128,10 @@ export default {
       },
     },
   },
+  mounted() {
+    this.product = this.container.product;
+    this.showSimulation();
+  },
   methods: {
     changeContainer(container) {
       if (container) {
@@ -136,8 +144,8 @@ export default {
     async runSimulation() {
       const load = {
         containerID: this.container.reeferID,
-        nb_of_records: this.container.product.amount,
-        product_id: this.container.product.id,
+        nb_of_records: this.nb_of_records,
+        product_id: "P01",
         simulation: this.simulation,
       };
 
@@ -145,7 +153,14 @@ export default {
         method: "POST",
         body: JSON.stringify(load),
       });
-      console.log(await controlResponse.text());
+      this.receivedRecords = await controlResponse.json();
+      this.showSimulation();
+    },
+    showSimulation(num = 0) {
+      this.$store.dispatch("addRecord", this.receivedRecords[num])
+      if (num < this.receivedRecords.length - 1) {
+        setTimeout(() => this.showSimulation(num + 1), 500);
+      }
     },
   },
 };
@@ -172,18 +187,7 @@ export default {
     vertical-align: inherit;
   }
 
-  .row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    span {
-      white-space: nowrap;
-      padding-left: 10px;
-    }
-  }
-
-  .bx--number {
+  .bx--number, .cv-text-input {
     .bx--label {
       display: none;
     }

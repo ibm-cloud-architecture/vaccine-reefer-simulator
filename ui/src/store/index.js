@@ -8,6 +8,7 @@ const store = new Vuex.Store({
     containers: [],
     notifications: [],
     alerts: [],
+    records: [],
     freezerMgrURL: "",
   },
   getters: {
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     },
     notifications: (state) => state.notifications,
     alerts: (state) => state.alerts,
+    records: (state) => state.records,
   },
   mutations: {
     addContainers(state, containers) {
@@ -34,6 +36,12 @@ const store = new Vuex.Store({
     addAlert(state, alert) {
       state.alerts = [{ ...alert, id: state.alerts.length }, ...state.alerts];
     },
+    addRecord(state, record) {
+      state.records = [
+        ...state.records,
+        { ...record, id: state.records.length },
+      ];
+    },
     setFreezerMgrURL(state, url) {
       state.freezerMgrURL = url;
     },
@@ -47,7 +55,9 @@ const store = new Vuex.Store({
         const reefers = await reefersData.json();
         context.commit(
           "setContainers",
-          reefers.sort((r1, r2) => r1.reeferID.localeCompare(r2.reeferID))
+          reefers
+            .map((r) => ({ ...r, product: "P01" }))
+            .sort((r1, r2) => r1.reeferID.localeCompare(r2.reeferID))
         );
       } catch (e) {
         const notification = {
@@ -82,6 +92,9 @@ const store = new Vuex.Store({
     },
     addAlert(context, alert) {
       context.commit("addAlert", { ...alert, receivedOn: new Date() });
+    },
+    addRecord(context, record) {
+      context.commit("addRecord", record);
     },
     setFreezerMgrURL(context, url) {
       context.commit("setFreezerMgrURL", url);
