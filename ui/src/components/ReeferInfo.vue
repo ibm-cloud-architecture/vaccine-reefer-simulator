@@ -24,9 +24,17 @@
         </cv-structured-list-item>
 
         <cv-structured-list-item>
-          <cv-structured-list-heading>Product</cv-structured-list-heading>
+          <cv-structured-list-heading>Brand</cv-structured-list-heading>
           <cv-structured-list-data>
-            <span v-if="container">{{ container.product.id }}</span>
+            <span v-if="container">{{ container.brand }}</span>
+            <cv-skeleton-text v-if="!container" />
+          </cv-structured-list-data>
+        </cv-structured-list-item>
+
+        <cv-structured-list-item>
+          <cv-structured-list-heading>Type</cv-structured-list-heading>
+          <cv-structured-list-data>
+            <span v-if="container">{{ container.type }}</span>
             <cv-skeleton-text v-if="!container" />
           </cv-structured-list-data>
         </cv-structured-list-item>
@@ -40,7 +48,7 @@
                 v-if="container"
                 :min="0"
                 :max="container.capacity"
-                v-model="container.product.amount"
+                v-model="container.amount"
               >
               </cv-number-input>
               <span v-if="container"> / {{ container.capacity }}</span>

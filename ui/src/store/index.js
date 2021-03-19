@@ -47,7 +47,7 @@ const store = new Vuex.Store({
         const reefers = await reefersData.json();
         context.commit(
           "setContainers",
-          reefers.map((r) => ({ ...r, product: { id: "P01", amount: 10 } }))
+          reefers.sort((r1, r2) => r1.reeferID.localeCompare(r2.reeferID))
         );
       } catch (e) {
         const notification = {
