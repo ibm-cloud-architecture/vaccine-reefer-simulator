@@ -5,14 +5,14 @@ else
   kcenv=$1
 fi
 
-
+# vaccine-reefer-simulator_default
 if [[ $kcenv == "LOCAL" ]]
 then
   docker run -v $(pwd):/app -e KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
      -e KAFKA_SASL_MECHANISM="" \
-     --network vaccine-reefer-simulator_default -p 5000:5000  \
+     --network vaccine-monitoring-agent_default  -p 5001:5000  \
       -ti quay.io/ibmcase/vaccine-reefer-simulator bash
 else
   source ./scripts/setenv.sh $kcenv

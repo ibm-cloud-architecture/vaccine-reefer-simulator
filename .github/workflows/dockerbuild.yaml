@@ -67,7 +67,7 @@ jobs:
       run: |
         IMAGE_NAME="${DOCKER_REG}/${DOCKER_R}/${DOCKER_I}"
         docker login -u ${DOCKER_U} -p ${DOCKER_P} ${DOCKER_REG}/
-        echo "Build and push the docker image $IMAGE_NAME"
+        echo "Build and push the docker image $IMAGE_NAME:$IMAGE_TAG"
         cd ${WORKDIR}
         docker build -f ${DOCKERFILE} -t ${IMAGE_NAME}:${IMAGE_TAG} .
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest

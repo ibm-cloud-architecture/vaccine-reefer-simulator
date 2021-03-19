@@ -4,4 +4,4 @@ metadata:
   name: reefer-simul-cm
 data:
     KAFKA_MAIN_TOPIC: reefer.telemetries
-    
+    FREEZER_MGR_URL: http://vaccine-freezer-mgr.vaccine-solution.svc

@@ -1,6 +1,6 @@
 
 from flask import Blueprint, request, abort, jsonify
-import logging
+import logging, os
 from flasgger import swag_from
 from flask_restful import Resource, Api
 from concurrent.futures import ThreadPoolExecutor
@@ -35,10 +35,11 @@ class SimulationController(Resource):
         """
         logging.info(metrics)
         for metric in metrics:
-            evt = {"containerID": metric[0],
-                    "timestamp": str(metric[1]),
+            print(metric)
+            evt = {"containerID": metric['container_id'],
+                    "timestamp": str(metric['measurement_time']),
                     "type":"ReeferTelemetries",
-                    "payload": str(metric)}
+                    "payload": metric}
             self.metricsProducer.publishEvent(evt,"containerID")
             
     # Need to support asynchronous HTTP Request, return 202 accepted while starting 
@@ -55,23 +56,23 @@ class SimulationController(Resource):
         
         nb_records = int(control["nb_of_records"])
         if control["simulation"] == ReeferSimulator.SIMUL_POWEROFF:
-            metrics=self.simulator.generatePowerOffTuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generatePowerOff(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.SIMUL_CO2:
-            metrics=self.simulator.generateCo2Tuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generateCo2(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.SIMUL_O2:
-            metrics=self.simulator.generateO2Tuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generateO2(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.SIMUL_TEMPERATURE:
-            metrics=self.simulator.generateTemperatureTuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generateTemperature(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.NORMAL:
-            metrics=self.simulator.generateNormalTuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generateNormal(control["containerID"],nb_records,control["product_id"])
         elif  control["simulation"]  == ReeferSimulator.TEMP_GROWTH:
-            metrics=self.simulator.generateTemperatureGrowthTuples(control["containerID"],nb_records,control["product_id"])
+            metrics=self.simulator.generateTemperatureGrowth(control["containerID"],nb_records,control["product_id"])
         else:
             return {"error":"Wrong simulation controller data"},404
     
         self.sendEvents(metrics)
             
-        return str(metrics),202
+        return metrics,202
     
 
 

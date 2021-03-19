@@ -179,7 +179,7 @@ class ReeferSimulator:
         df["measurement_time"] = _generateTimestamps(nb_records, start_time)
         return df[ReeferSimulator.COLUMN_NAMES]
 
-    def generateNormalTuples(self,
+    def generateNormal(self,
                                cid: str = "C01",
                                nb_records: int = MAX_RECORDS,
                                product_id: str = 'P02',
@@ -192,7 +192,7 @@ class ReeferSimulator:
         '''
         df = self.generateNormalRecords(
             cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return  self.frameToJson(df)
     
     def generatePowerOffRecords(self,
                                 cid: str = "C01",
@@ -230,7 +230,7 @@ class ReeferSimulator:
                 df.at[i, "fan_3"] = False
         return df[ReeferSimulator.COLUMN_NAMES]
 
-    def generatePowerOffTuples(self,
+    def generatePowerOff(self,
                                cid: str = "C01",
                                nb_records: int = MAX_RECORDS,
                                product_id: str = 'P02',
@@ -243,7 +243,7 @@ class ReeferSimulator:
         '''
         df = self.generatePowerOffRecords(
             cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return self.frameToJson(df)
 
     def generateCo2Records(self,
                            cid: str = "C01",
@@ -270,7 +270,7 @@ class ReeferSimulator:
                 (currentCO2 > 12) or (currentCO2 < 0)) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
-    def generateCo2Tuples(self,
+    def generateCo2(self,
                           cid: str = "C01",
                           nb_records: int = MAX_RECORDS,
                           product_id: str = 'P02',
@@ -284,7 +284,7 @@ class ReeferSimulator:
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
         df = self.generateCo2Records(cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return self.frameToJson(df)
 
     def generateO2Records(self,
                           cid: str = "C01",
@@ -310,13 +310,13 @@ class ReeferSimulator:
             df.at[i, "maintenance_required"] = 1 if (currentO2 < 12) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
-    def generateO2Tuples(self,
+    def generateO2(self,
                          cid: str = "C01",
                          nb_records: int = MAX_RECORDS,
                          product_id: str = 'P02',
                          start_time: datetime.datetime = None):
         df = self.generateO2Records(cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return self.frameToJson(df)
 
     def generateTemperatureRecords(self,
                                    cid: str = "C01",
@@ -343,23 +343,23 @@ class ReeferSimulator:
                 np.abs(products[product_id]['T'] - currentT) > 20) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
-    def generateTemperatureTuples(self,
+    def generateTemperature(self,
                                   cid: str = "C01",
                                   nb_records: int = MAX_RECORDS,
                                   product_id: str = 'P01',
                                   start_time: datetime.datetime = None):
         df = self.generateTemperatureRecords(
             cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return self.frameToJson(df)
 
-    def generateTemperatureGrowthTuples(self,
+    def generateTemperatureGrowth(self,
                                   cid: str = "C01",
                                   nb_records: int = MAX_RECORDS,
                                   product_id: str = 'P01',
                                   start_time: datetime.datetime = None):
         df = self.generateTemperatureGrowthRecords(
             cid, nb_records, product_id, start_time)
-        return list(df.to_records(index=False))
+        return self.frameToJson(df)
 
     def generateTemperatureGrowthRecords(self,
                                    cid: str = "C01",
@@ -382,6 +382,9 @@ class ReeferSimulator:
                 base_temp = base_temp + 2
             df.at[i, "temperature"] = base_temp
         return df[ReeferSimulator.COLUMN_NAMES]
+
+    def frameToJson(self,df):
+        return json.loads(df.to_json(orient="records"))
 
 if __name__ == '__main__':
     simul = ReeferSimulator()

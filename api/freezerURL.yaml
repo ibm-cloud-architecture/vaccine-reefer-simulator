@@ -1,0 +1,8 @@
+URL of the Freezer manager service
+Return URL of the Freezer manager service
+---
+responses:
+  200:
+    description: The Freezer manager service URL
+    examples:
+      version: http://vaccine-freezer-mgr.jbsandbox.svc
