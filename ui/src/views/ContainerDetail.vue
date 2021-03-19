@@ -3,6 +3,7 @@
     <ReeferInfo :container="container" />
     <div class="separator"></div>
     <div class="right-panel">
+      <LiveCharts/>
       <KafkaRecords :container="container" />
     </div>
   </div>
@@ -19,7 +20,7 @@ export default {
   components: {
     ReeferInfo,
     LiveCharts,
-    KafkaRecords,
+    KafkaRecords
   },
   mounted() {
     this.loadContainerByIdInRoute();

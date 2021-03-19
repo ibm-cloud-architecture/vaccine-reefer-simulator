@@ -8,7 +8,7 @@ The last updated detailed documentation of this component is under [this chapter
 
 ## Build
 
-To build the local image:
+To build the local image use `./script/buildAll.sh` which runs: 
 
 ```shell
 docker build -t ibmcase/vaccine-reefer-simulator .
@@ -17,6 +17,48 @@ docker push ibmcase/vaccine-reefer-simulator
 
 ## Run locally
 
+We have different modes to run the simulator locally depending of the target Kafka cluster.
+
+### Run with local Kafka
+
+The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
+
+We did not mount any folder to persist Kafka topics data, so each time you start this cluster you must create the `telemetries` topic with the command: `./scripts/createTopics.sh`.
+
+You can always validate the list of topics with the command: `./scripts/listTopics.sh`
+
+For development purpose, you can start a docker image with a Python environment:
+
+```shell
+./scripts/startPythonEnv.sh
+# then in the container shell start the app
+python app.py
+```
+
+[http://localhost:5000/apidocs](http://localhost:5000/apidocs) will go directly to the Open API user interface.
+
+Use the following command to send 20 simultated temperatures 
+
+```
+curl -X POST http://localhost:5000/control -d "{\"containerID\": \"C01\",\"nb_of_records\": 20,\"product_id\": \"P01\",\"simulation\": \"tempgrowth\"}"
+```
+
+The response is a string of tuples like:
+
+```
+[('C01', '2021-03-19 02:48:25', 'P01', -50.66101485, -50., 18.6447905, 3.65012681, 0, 1, 4, 21.75044215, 78.3859634, 40.7754046, 7.81047338, True, True, True, '37.8226902168957', '-122.324895', 0), ('C01', '2021-03-19 02:53:25', 'P01', -50.60219959, -50., 18.06471888, 2.27853715, 0, 1, 3, 21.38479556, 78.68539182, 40.37011913, 6.44987377, True, True, True, '37.8226902168957', '-122.324895', 0), ('C01', '2021-03-19 02:58:25', 'P01', -50.63849678, -50., 19.77104538, 2.79465754, 0, 1, 5, 19.55180659, 77.93256727, 41.7870542, 8.3963486, True, True, True, '37.8226902168957', '-122.324895', 0), ('C01', '2021-03-19 03:03:25', 'P01', -52.43289337, -50., 17.86306113, 1.80923096, 0, 1, 4, 18.95530879, 78.34202763, 39.11963127, 6.85136766, True, True, True, '37.8226902168957', '-122.324895', 0),...
+```
+
+Where the columns are: 
+
+```
+[“container_id”, “measurement_time”, “product_id”,
+ “temperature”, “target_temperature”, “ambiant_temperature”,
+ “kilowatts”, “time_door_open”,
+ “content_type”, “defrost_cycle”,
+ “oxygen_level”, “nitrogen_level”, “humidity_level”, “carbon_dioxide_level”,
+  “fan_1”, “fan_2", “fan_3”, “latitude”, “longitude”, “maintenance_required”
+```
 
 ### Run with remote Kafka cluster deployed on OpenShift
 
@@ -64,21 +106,6 @@ python reefer_simulator_tool.py --stype co2sensor --cid C01 --product_id covid-1
 # append errors for o2sensor
 python reefer_simulator_tool.py --stype o2sensor --cid C01 --product_id covid-19 --records 700 --file telemetries.csv --append
 ```
-
-### Run with local Kafka
-
-The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine. To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
-
-Use the startPython environment:
-
-```shell
-./scripts/startPythonEnv.sh LOCAL
-# then in the container shell
-python app.py
-```
-
-[http://localhost:8080/](http://localhost:5000/) will go directly to the Open API user interface.
-
 
 ## Running on OpenShift
 

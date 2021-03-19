@@ -4,23 +4,20 @@ if [[ $# -eq 0 ]];then
 else
   kcenv=$1
 fi
-source ./scripts/setenv.sh $kcenv
 
-if [[ -z "$IPADDR" ]]
-then
-    export IPADDR=$(ifconfig en0 |grep "inet " | awk '{ print $2}')
-fi
 
 if [[ $kcenv == "LOCAL" ]]
 then
-  docker run -e DISPLAY=$IPADDR:0 -v $(pwd):/app -e KAFKA_BROKERS=$KAFKA_BROKERS \
+  docker run -v $(pwd):/app -e KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
+     -e KAFKA_SASL_MECHANISM="" \
      --network vaccine-reefer-simulator_default -p 5000:5000  \
-      -ti ibmcase/vaccine-reefer-simulator bash
+      -ti quay.io/ibmcase/vaccine-reefer-simulator bash
 else
-  docker run  -e DISPLAY=$IPADDR:0 -v $(pwd):/app -ti  \
-      -e KAFKA_BROKERS=$KAFKA_BROKERS -e SCHEMA_REGISTRY_URL=$SCHEMA_REGISTRY_URL \
+  source ./scripts/setenv.sh $kcenv
+  docker run  -v $(pwd):/app -ti  \
+      -e KAFKA_BOOTSTRAP_SERVERS=$KAFKA_BROKERS -e SCHEMA_REGISTRY_URL=$SCHEMA_REGISTRY_URL \
       -e REEFER_TOPIC=$REEFER_TOPIC -e INVENTORY_TOPIC=$INVENTORY_TOPIC \
       -e TRANSPORTATION_TOPIC=$TRANSPORTATION_TOPIC \
       -e KAFKA_USER=$KAFKA_USER -e KAFKA_PASSWORD=$KAFKA_PASSWORD\
