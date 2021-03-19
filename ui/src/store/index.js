@@ -42,7 +42,7 @@ const store = new Vuex.Store({
     async loadContainers(context) {
       try {
         const reefersData = await fetch(
-          `${context.state.freezerMgrUrl}/reefers`
+          `${context.state.freezerMgrURL}/reefers`
         );
         const reefers = await reefersData.json();
         context.commit(
