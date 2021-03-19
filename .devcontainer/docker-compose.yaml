@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+    simulator:
+        build:
+          context: .
+          dockerfile: .devcontainer/Dockerfile
+          args:
+            "VARIANT": "3.7"
+            "INSTALL_NODE": "true"
+            "NODE_VERSION": "lts/*"
+        command: /bin/sh -c "while sleep 1000; do :; done"
+        volumes:
+          - .:/workspace:cached
+        environment:
+            - 'KAFKA_BOOTSTRAP_SERVERS=kafka:9092'
+            - KAFKA_APIKEY=
+            - KAFKA_CERT=
+            - KAFKA_SASL_MECHANISM=

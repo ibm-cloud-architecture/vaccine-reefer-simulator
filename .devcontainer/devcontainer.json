@@ -1,29 +1,28 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/python-3
+// Choose between ("build")  and ("dockerComposeFile", "service" and "workspaceFolder")
+// in order to run (front + back) or (front + back + kafka + zookeeper)
 {
 	"name": "Python 3 + Node",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"context": "..",
-		"args": { 
-			// Update 'VARIANT' to pick a Python version: 3, 3.6, 3.7, 3.8, 3.9
-			"VARIANT": "3.7",
-			// Options
-			"INSTALL_NODE": "true",
-			"NODE_VERSION": "lts/*"
-		}
-	},
+	// "build": {
+	// 	"dockerfile": "Dockerfile",
+	// 	"context": "..",
+	// 	"args": { 
+	// 		"VARIANT": "3.7",
+	// 		"INSTALL_NODE": "true",
+	// 		"NODE_VERSION": "lts/*"
+	// 	}
+	// },
 
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
-	// "dockerComposeFile": [
-	// 	"../docker-compose.yaml",
-	// 	"docker-compose.yml"
-	// ],
+	"dockerComposeFile": [
+		"../docker-compose.yaml",
+		"docker-compose.yaml"
+	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
-	// "service": "front",
+	"service": "simulator",
+	"workspaceFolder": "/workspace",
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
