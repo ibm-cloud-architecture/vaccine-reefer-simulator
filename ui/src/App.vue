@@ -9,24 +9,25 @@
 <script>
 import Header from "@/components/Header.vue";
 import NotificationCenter from "@/components/NotificationCenter.vue";
-import { freezerMgrUrl, backendUrl } from "@/tools.js";
+import { backendUrl } from "@/tools.js";
 
 export default {
   name: "App",
   components: { Header, NotificationCenter },
   async mounted() {
+    const data = await fetch(`${backendUrl}/freezerurl`);
+    const freezerMgrURL = (await data.json()).freezerMgrURL;
+
+    this.$store.dispatch("setFreezerMgrURL", freezerMgrURL);
     this.$store.dispatch("loadContainers");
 
-    const reeferAlerts = new EventSource(`${freezerMgrUrl}/reefers/alerts`);
+    const reeferAlerts = new EventSource(`${freezerMgrURL}/reefers/alerts`);
     reeferAlerts.onmessage = (message) => console.log(message);
 
     reeferAlerts.onmessage = (message) => {
       const alert = JSON.parse(message.data);
       this.$store.dispatch("addAlert", alert);
     };
-
-    const data = await fetch(`${backendUrl}/health`);
-    console.log(await data.json());
   },
 };
 </script>
