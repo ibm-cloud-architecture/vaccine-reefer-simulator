@@ -9,13 +9,13 @@
 <script>
 import Header from "@/components/Header.vue";
 import NotificationCenter from "@/components/NotificationCenter.vue";
-import { backendUrl } from "@/tools.js";
+import { backendURL } from "@/tools.js";
 
 export default {
   name: "App",
   components: { Header, NotificationCenter },
   async mounted() {
-    const data = await fetch(`${backendUrl}/freezerurl`);
+    const data = await fetch(`${backendURL}/freezerurl`);
     const freezerMgrURL = (await data.json()).freezerMgrURL;
 
     this.$store.dispatch("setFreezerMgrURL", freezerMgrURL);
