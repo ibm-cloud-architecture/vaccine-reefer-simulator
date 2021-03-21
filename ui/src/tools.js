@@ -1,1 +1,1 @@
-export const backendUrl = (process.env.VUE_APP_BACKEND_URL || "/").replace(/\/$/, "");
+export const backendURL = (process.env.VUE_APP_BACKEND_URL || "/").replace(/\/$/, "");

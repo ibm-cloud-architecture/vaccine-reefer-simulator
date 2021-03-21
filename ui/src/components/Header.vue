@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { backendURL } from "@/tools.js";
+
 export default {
   name: "Header",
   data() {
@@ -53,7 +55,7 @@ export default {
           link:
             "https://ibm-cloud-architecture.github.io/vaccine-solution-main/",
         },
-        { title: "Backend Swagger", link: "http://localhost:5000/apidocs" },
+        { title: "Backend Swagger", link: `${backendURL}/apidocs` },
       ],
     };
   },
