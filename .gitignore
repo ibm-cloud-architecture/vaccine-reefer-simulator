@@ -7,6 +7,7 @@ scripts/setenv.sh
 scripts/kafka.properties
 scripts/defineConfigMap.sh
 certs/*.pem
+certs/*.p12
 config/secret.yaml
 ### VS Code ###
 .vscode/

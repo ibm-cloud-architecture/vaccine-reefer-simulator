@@ -26,7 +26,7 @@ class SimulationController(Resource):
 
     @swag_from('version.yaml')
     def get(self):
-        return jsonify({"version": "v0.0.3"})
+        return jsonify({"version": "v0.0.4"})
     
 
     def sendEvents(self,metrics):

@@ -129,7 +129,12 @@ export default {
     },
   },
   mounted() {
-    this.product = this.container.product;
+    if (this.container != null) {
+      this.product = this.container.product;
+    } else {
+      this.product = "P01"
+    }
+   
     this.showSimulation();
   },
   methods: {
@@ -145,11 +150,11 @@ export default {
       const load = {
         containerID: this.container.reeferID,
         nb_of_records: this.nb_of_records,
-        product_id: "P01",
+        product_id: this.product,
         simulation: this.simulation,
       };
 
-      const controlResponse = await fetch("http://localhost:5000/control", {
+      const controlResponse = await fetch("/control", {
         method: "POST",
         body: JSON.stringify(load),
       });
