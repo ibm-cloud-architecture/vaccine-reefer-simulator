@@ -95,6 +95,7 @@
 <script>
 import { mapGetters } from "vuex";
 import Checkmark32 from "@carbon/icons-vue/es/checkmark/32";
+import { backendURL } from "@/tools.js";
 
 export default {
   name: "ReeferInfo",
@@ -154,7 +155,7 @@ export default {
         simulation: this.simulation,
       };
 
-      const controlResponse = await fetch("/control", {
+      const controlResponse = await fetch(`${backendURL}/control`, {
         method: "POST",
         body: JSON.stringify(load),
       });
