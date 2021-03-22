@@ -60,4 +60,5 @@ def apidoc():
 
 
 if __name__ == "__main__":
+  print("Starting server version 0.0.3")
   app.run(debug=True,host='0.0.0.0',port=5000)

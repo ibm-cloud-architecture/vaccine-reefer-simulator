@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import pandas as pd 
 import json
 
-
+# This code is no more used. kept here as an example to presist to mongodb
 def toJson(record):
     t = {}
     sensors = {}

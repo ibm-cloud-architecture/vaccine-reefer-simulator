@@ -2,18 +2,33 @@
 
 The _simulator_ component is a Python-based application for generating anomalous data events for refrigerated shipping containers (also known as 'reefers'). This code is part of the Vaccine Cold Chain monitoring solution, and helps to control the test and the demonstration of the cold chain monitoring scenario or the anomaly detection use case.
 
-You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
-The last updated detailed documentation of this component is under [this chapter](https://ibm-cloud-architecture.github.io/vaccine-solution-main/solution/reefer-iot/).
+This implementation illustrates the following technologies:
 
+* Flask, with blueprint, flasgger.Swagger, prometheus metrics
+* Kafka producer code using Confuent-python library
+* Integration with Health for kubernetes deployment
+* Sensor simulator using numpy, Pandas to generate tuples and simulated data
+* Use of gnunicorn for serving the webapp in production
+* Vuejs application connect to Server Side End point from another service
+* Dynamic end point URL injection to the Vuejs via a REST end point (see `api/freezerURL.py`)
+* Vuejs and gauge implemented with
+* Docker-compose to run locally
+* Use gipops and Kustomize for deployment. This is declared in a separate [gitops repository](https://github.com/ibm-cloud-architecture/vaccine-gitops) under `apps` folder.
+
+You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
+
+The last updated detailed documentation of this component is under [the Reefer Simulator IoT design chapter](https://ibm-cloud-architecture.github.io/vaccine-solution-main/solution/reefer-iot/).
 
 ## Build
 
-To build the local image use `./script/buildAll.sh` which runs: 
+To build the local image use `./script/buildAll.sh` which runs:
 
 ```shell
 docker build -t ibmcase/vaccine-reefer-simulator .
 docker push ibmcase/vaccine-reefer-simulator
 ```
+
+The build includes a user interface in Vuejs and the Flask app.
 
 ## Run locally
 
@@ -23,13 +38,13 @@ We have different modes to run the simulator locally depending of the target Kaf
 
 The repository includes a sample `docker-compose.yaml` which you can use to run a single-node Kafka cluster on your local machine.
 
-* To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and also create a Docker network on your machine, which you can find the name of by running `docker network list`.
+* To start Kafka locally, run `docker-compose up -d`. This will start Kafka, Zookeeper, and the Reefer manager service, all connected via a Docker network on your machine, which you can find the name of by running `docker network list`.
 
 We did not mount any folder to persist Kafka topics data, so each time you start this cluster you must create the `telemetries` topic with the command: `./scripts/createTopics.sh`.
 
 You can always validate the list of topics with the command: `./scripts/listTopics.sh`
 
-* For development purpose, you can start a docker image with a Python environment:
+* For development purpose, you can start a docker image with a Python environment using the command:
 
 ```shell
 ./scripts/startPythonEnv.sh
@@ -37,9 +52,9 @@ You can always validate the list of topics with the command: `./scripts/listTopi
 python app.py
 ```
 
-[http://localhost:5000/apidocs](http://localhost:5000/apidocs) will go directly to the Open API user interface.
+Access the OpenAPI doc at [http://localhost:5000/apidocs](http://localhost:5000/apidocs).
 
-* Use the following command to send 20 simulated temperatures 
+* Use the following command to send 20 simulated temperatures
 
 ```
 curl -X POST http://localhost:5000/control -d "{\"containerID\": \"C01\",\"nb_of_records\": 20,\"product_id\": \"P01\",\"simulation\": \"tempgrowth\"}"
@@ -63,6 +78,22 @@ Where the columns are:
 ```
 
 * Verify the telemetries records are in the topic: `./scripts/verifyTelemetrieTopicContent.sh`
+
+### Start the User Interface
+
+The `ui` folder includes a Vuejs app which can be started by doing the following:
+
+```shell
+export VUE_APP_SERVER_URL=http://localhost:5000
+# under ui folder
+yarn serve
+```
+
+Then point your web browser to [http://localhost:4200/](http://localhost:4200/#/), you should get a list of existing containers and then once selecting one of them, you should see the simulator controller page:
+
+![](./docs/simulator.png)
+
+See the demonstration script in [this note](https://ibm-cloud-architecture.github.io/vaccine-solution-main/use-cases/cold-chain/#scenario-script).
 
 ### Run the simulator as a standalone program
 

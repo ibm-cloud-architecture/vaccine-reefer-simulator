@@ -12,7 +12,8 @@ then
      -e KAFKA_APIKEY="" \
      -e KAFKA_CERT="" \
      -e KAFKA_SASL_MECHANISM="" \
-     --network vaccine-monitoring-agent_default  -p 5001:5000  \
+     -e REMOTE_CONTAINERS=true \
+     --network vaccine-reefer-simulator_default  -p 5000:5000  \
       -ti quay.io/ibmcase/vaccine-reefer-simulator bash
 else
   source ./scripts/setenv.sh $kcenv
