@@ -13,7 +13,7 @@ This implementation illustrates the following technologies:
 * Dynamic end point URL injection to the Vuejs via a REST end point (see `api/freezerURL.py`)
 * Vuejs and gauge implemented with
 * Docker-compose to run locally
-* Use gipops and Kustomize for deployment. This is declared in a separate [gitops repository](https://github.com/ibm-cloud-architecture/vaccine-gitops) under `apps` folder.
+* Use gitops and Kustomize for deployment. This is declared in a separate [gitops repository](https://github.com/ibm-cloud-architecture/vaccine-gitops) under `apps` folder.
 
 You can read more of the solution in [this site](https://ibm-cloud-architecture.github.io/vaccine-solution-main/).
 
